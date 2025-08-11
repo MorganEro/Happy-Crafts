@@ -1,0 +1,61 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Product {
+  id          String     @id @default(uuid())
+  name        String
+  company     String
+  description String
+  image       String  // Keep this as the main/featured image for backward compatibility
+  price       Int
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  customerId  String
+  likes       Like[]
+  reviews     Review[]
+  images      ProductImage[]
+}
+
+model ProductImage {
+  id        String   @id @default(uuid())
+  url       String
+  altText   String?  @default("")
+  isPrimary Boolean  @default(false)
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([productId])
+}
+
+model Like {
+  id          String   @id @default(uuid())
+  customerId  String
+  productId   String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  product     Product  @relation(fields: [productId], references: [id])
+
+  @@unique([customerId, productId])
+}
+
+model Review {
+  id             String   @id @default(uuid())
+  productId      String
+  customerId     String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  rating         Int
+  comment        String
+  authorName     String
+  authorImageUrl String
+  product        Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
