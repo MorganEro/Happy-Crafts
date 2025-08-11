@@ -2,7 +2,7 @@
 
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { getProductById, type ProductWithRelations } from '@/services/products';
+import { getProductById, type ProductWithRelations, type ProductImage } from '@/services/products';
 import { useQuery, useQueryClient, type QueryClient } from '@tanstack/react-query';
 import { ArrowLeft, Edit, Heart, ShoppingCart, Star, Trash2 } from 'lucide-react';
 import Image from 'next/image';
@@ -126,22 +126,32 @@ const ProductContent = ({
   // Set up gallery images when product data is loaded
   useEffect(() => {
     try {
-      // Ensure product.image is a string
-      const mainImage = typeof product.image === 'string' ? product.image : '/placeholder-product.jpg';
+      // Ensure we have a valid main image or use placeholder
+      const mainImage = (typeof product.image === 'string' && product.image.trim() !== '')
+        ? product.image
+        : '/placeholder-product.jpg';
 
-      // Get all images including the main image and any additional images
-      const additionalImages = Array.isArray(product.images)
-        ? product.images
-            .filter((img) =>
-              img && typeof img === 'object' && 'url' in img && typeof img.url === 'string'
-            )
-            .map((img) => img.url as string)
-        : [];
+      // Safely get additional images
+      const additionalImages = (Array.isArray(product.images) ? product.images : [])
+        .filter((img): img is ProductImage => 
+          img && 
+          typeof img === 'object' &&
+          'url' in img &&
+          typeof img.url === 'string' &&
+          img.url.trim() !== '' &&
+          'id' in img &&
+          'isPrimary' in img &&
+          'productId' in img
+        )
+        .map(img => img.url);
 
-      const allImages = [mainImage, ...additionalImages].filter(Boolean) as string[];
-
-      // Fallback to placeholder if no images are available
+      // Combine images, ensuring we have at least the placeholder
+      const allImages = [mainImage, ...additionalImages]
+        .filter((url): url is string => Boolean(url && url.trim() !== ''));
+        
       setGalleryImages(allImages.length > 0 ? allImages : ['/placeholder-product.jpg']);
+
+      // Error handling is done in the catch block below
     } catch (err) {
       console.error('Error setting up gallery images:', err);
       setGalleryImages(['/placeholder-product.jpg']);
@@ -200,10 +210,10 @@ const ProductContent = ({
     : 0;
 
   return (
-    <div className="w-full max-w-7xl mx-auto px-2 sm:px-4 py-4 sm:py-8">
-      <div className="mb-4 sm:mb-6 px-2">
+    <div className="w-full max-w-7xl mx-auto backdrop-blur-xs py-4 sm:py-8">
+      <div className="mb-4 sm:mb-6">
         <Button
-          variant="ghost"
+          variant="link"
           onClick={() => router.back()}
           className="flex items-center gap-2 text-sm sm:text-base"
         >
@@ -212,29 +222,46 @@ const ProductContent = ({
         </Button>
       </div>
 
-      <div className="grid gap-6 md:gap-8 md:grid-cols-2 bg-white/80 backdrop-blur-sm p-4 sm:p-6 rounded-lg shadow-sm overflow-hidden">
+      <div className="grid gap-6 md:gap-8 md:grid-cols-2 p-4 sm:p-6 rounded-lg w-full mx-auto">
         {/* Product Images */}
-        <div className="space-y-3 sm:space-y-4">
-          <div className="relative aspect-square w-full overflow-hidden rounded-lg border">
-            <Image
-              src={galleryImages[selectedImage] || '/placeholder-product.jpg'}
-              alt={product.name}
-              fill
-              className="object-cover"
-              priority
-            />
+        <div className="relative">
+          <div className="relative aspect-square w-full overflow-hidden">
+            {galleryImages[selectedImage] ? (
+              <Image
+                src={galleryImages[selectedImage]}
+                alt={product.name}
+                sizes="(min-width: 768px) 50vw, 100vw"
+                className="object-cover rounded-lg"
+                priority
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  target.style.display = 'none';
+                  const container = target.parentElement;
+                  if (container) {
+                    const missingText = document.createElement('div');
+                    missingText.className = 'flex items-center justify-center h-full w-full bg-gray-100 text-gray-500';
+                    missingText.textContent = 'Image Not Available';
+                    container.appendChild(missingText);
+                  }
+                }}
+              />
+            ) : (
+              <div className="flex items-center justify-center h-full w-full bg-gray-100 text-gray-500">
+                Image Not Available
+              </div>
+            )}
             {galleryImages.length > 1 && (
               <>
                 <button
                   onClick={handlePreviousImage}
-                  className="absolute left-2 top-1/2 -translate-y-1/2 rounded-full bg-white/80 p-2 shadow-md transition-colors hover:bg-white"
+                  className="absolute left-2 top-1/2 -translate-y-1/2 rounded-full bg-white/80 p-2 shadow-md hover:bg-white transition-colors z-10"
                   aria-label="Previous image"
                 >
                   <ArrowLeft className="h-5 w-5" />
                 </button>
                 <button
                   onClick={handleNextImage}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-white/80 p-2 shadow-md transition-colors hover:bg-white"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-white/80 p-2 shadow-md hover:bg-white transition-colors z-10"
                   aria-label="Next image"
                 >
                   <ArrowLeft className="h-5 w-5 rotate-180" />
@@ -244,21 +271,22 @@ const ProductContent = ({
           </div>
 
           {galleryImages.length > 1 && (
-            <div className="grid grid-cols-6 gap-2 overflow-x-auto pb-2 px-1">
+            <div className="mt-3 grid grid-cols-6 gap-2">
               {galleryImages.map((image, index) => (
                 <button
                   key={index}
                   onClick={() => setSelectedImage(index)}
-                  className={`relative aspect-square w-full min-w-[60px] overflow-hidden rounded-md border-2 transition-all ${
-                    selectedImage === index ? 'border-blue-500' : 'border-transparent'
-                  }`}
+                  className={cn(
+                    "relative aspect-square w-full overflow-hidden rounded-md border-2 transition-all",
+                    selectedImage === index ? "border-primary" : "border-transparent"
+                  )}
                 >
                   <Image
                     src={image}
-                    alt={`${product.name} thumbnail ${index + 1}`}
+                    alt=""
                     fill
                     className="object-cover"
-                    sizes="(max-width: 640px) 25vw, 16.66vw"
+                    sizes="(max-width: 640px) 16vw, 80px"
                   />
                 </button>
               ))}
@@ -293,7 +321,7 @@ const ProductContent = ({
 
           <div className="space-y-4">
             <p className="text-3xl font-bold">${product.price.toFixed(2)}</p>
-            <p className="text-muted-foreground">{product.description}</p>
+            <p>{product.description}</p>
           </div>
 
           <div className="flex gap-4 pt-4">
@@ -393,19 +421,6 @@ const ProductContent = ({
         ) : (
           <p className="text-muted-foreground">No reviews yet. Be the first to review!</p>
         )}
-      </div>
-
-      {/* Product Details Section */}
-      <div className="mt-6">
-        <h2 className="text-sm font-medium text-foreground">Details</h2>
-        <div className="mt-4 space-y-6">
-          <ul className="list-disc space-y-2 pl-5 text-muted-foreground">
-            <li>High-quality materials</li>
-            <li>Eco-friendly packaging</li>
-            <li>Free shipping on orders over $50</li>
-            <li>30-day return policy</li>
-          </ul>
-        </div>
       </div>
     </div>
   );

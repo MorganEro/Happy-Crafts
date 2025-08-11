@@ -47,87 +47,58 @@ type ProductWithRelations = {
   hasLiked?: boolean;
 };
 
-export async function GET(
-  request: Request,
-  { params }: { params: { id: string } }
-) {
+type RouteCtx = { params: Promise<{ id: string }> };
+
+export async function GET(request: Request, ctx: RouteCtx) {
   try {
-    const { id } = params;
-    
+    const { id } = await ctx.params; // <-- await the params
+
     if (!id) {
-      return NextResponse.json(
-        { error: 'Product ID is required' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Product ID is required' }, { status: 400 });
     }
-    
-    console.log('Fetching product with ID:', id);
-    
+
     const product = await prisma.product.findUnique({
       where: { id },
       include: {
-        reviews: {
-          orderBy: {
-            createdAt: 'desc',
-          },
-        },
+        reviews: { orderBy: { createdAt: 'desc' } },
         images: true,
         likes: true,
-        _count: {
-          select: {
-            reviews: true,
-            likes: true,
-          },
-        },
+        _count: { select: { reviews: true, likes: true } },
       },
     });
-    
-    console.log('Found product:', product ? 'yes' : 'no');
-    
+
     if (!product) {
-      return NextResponse.json(
-        { error: 'Product not found' },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: 'Product not found' }, { status: 404 });
     }
 
-    // Calculate average rating and prepare the response
-    const reviews = product.reviews || [];
-    const averageRating = reviews.length > 0
-      ? reviews.reduce((sum: number, review: { rating: number }) => sum + review.rating, 0) / reviews.length
-      : 0;
-    
-    // Prepare the response object
+    const reviews = product.reviews ?? [];
+    const averageRating =
+      reviews.length ? reviews.reduce((s, r) => s + (r.rating ?? 0), 0) / reviews.length : 0;
+
     const responseData: any = {
       ...product,
-      images: product.images || [],
-      reviews: reviews,
-      averageRating: parseFloat(averageRating.toFixed(1)),
-      likeCount: product._count?.likes || 0,
-      reviewCount: product._count?.reviews || 0,
-      hasLiked: false, // Will be set below if user is authenticated
+      images: product.images ?? [],
+      reviews,
+      averageRating: Number(averageRating.toFixed(1)),
+      likeCount: product._count?.likes ?? 0,
+      reviewCount: product._count?.reviews ?? 0,
+      hasLiked: false,
     };
-    
-    // Remove the _count field as it's not needed in the response
     delete responseData._count;
 
-    // Check if current user has liked the product
     const session = await auth();
     const { userId: clerkId } = session;
-    
     if (clerkId) {
-      responseData.hasLiked = (product.likes || []).some((like: { customerId: string }) => like.customerId === clerkId);
+      responseData.hasLiked = (product.likes ?? []).some(like => like.customerId === clerkId);
     }
 
     return NextResponse.json(responseData);
-  } catch (error) {
-    console.error('Error fetching product:', error)
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    )
+  } catch (err) {
+    console.error('Error fetching product:', err);
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
+
 
 import { isAdmin } from '@/lib/auth-utils';
 

@@ -57,7 +57,7 @@ export default function RootLayout({
         <Providers>
             <div className="relative flex min-h-screen flex-col px-6 sm:px-4 lg:px-8">
               <MainNav />
-              <main className="flex-1 w-10/12 mx-auto mt-16">
+              <main className="flex-1 sm:w-10/12 mx-auto mt-16">
                 {children}
               </main>
             </div>
