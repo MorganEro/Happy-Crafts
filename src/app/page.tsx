@@ -3,8 +3,14 @@
 import { ProductCard } from '@/components/ProductCard';
 import { getProducts } from '@/services/products';
 import { useQuery } from '@tanstack/react-query';
+import { useAdmin } from '@/hooks/use-admin';
+import { Button } from '@/components/ui/button';
+import { Plus } from 'lucide-react';
+import Link from 'next/link';
 
 export default function Home() {
+    const { isAdmin, isLoading: isAuthLoading } = useAdmin()
+  
   const { data: products, isLoading, error } = useQuery({
     queryKey: ['products'],
     queryFn: getProducts,
@@ -24,11 +30,21 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen bg-blue-50 py-12 px-4 sm:px-6 lg:px-8 ">
+      {!isAuthLoading && isAdmin && (
+        <div className="flex justify-end mb-6">
+            <Button variant="outline" size="sm" asChild>
+              <Link href="/products/new" title="Add Product">
+                <Plus className="h-4 w-4" aria-label="Add Product" />
+                Add Product
+              </Link>
+            </Button>
+          </div>
+          )}
+      <div className="max-w-7xl mx-auto">        
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">Featured Products</h1>
-          <p className="text-lg text-gray-600">Discover our amazing collection of products</p>
+          <h1 className="text-4xl font-bold text-gray-900 mb-2">Welcome to Leslie's Happy Crafts</h1>
+          <p className="text-lg text-gray-600 font-semibold">Come explore my amazing collection of crafts and gift ideas</p>
         </div>
 
         {products && products.length > 0 ? (

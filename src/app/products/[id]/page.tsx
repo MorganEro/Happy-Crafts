@@ -200,22 +200,22 @@ const ProductContent = ({
     : 0;
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="mb-6">
+    <div className="w-full max-w-7xl mx-auto px-2 sm:px-4 py-4 sm:py-8">
+      <div className="mb-4 sm:mb-6 px-2">
         <Button
           variant="ghost"
           onClick={() => router.back()}
-          className="flex items-center gap-2"
+          className="flex items-center gap-2 text-sm sm:text-base"
         >
           <ArrowLeft className="h-4 w-4" />
           Back to products
         </Button>
       </div>
 
-      <div className="grid gap-8 md:grid-cols-2">
+      <div className="grid gap-6 md:gap-8 md:grid-cols-2 bg-white/80 backdrop-blur-sm p-4 sm:p-6 rounded-lg shadow-sm overflow-hidden">
         {/* Product Images */}
-        <div className="space-y-4">
-          <div className="relative aspect-square overflow-hidden rounded-lg border">
+        <div className="space-y-3 sm:space-y-4">
+          <div className="relative aspect-square w-full overflow-hidden rounded-lg border">
             <Image
               src={galleryImages[selectedImage] || '/placeholder-product.jpg'}
               alt={product.name}
@@ -244,12 +244,12 @@ const ProductContent = ({
           </div>
 
           {galleryImages.length > 1 && (
-            <div className="grid grid-cols-4 gap-2">
+            <div className="grid grid-cols-6 gap-2 overflow-x-auto pb-2 px-1">
               {galleryImages.map((image, index) => (
                 <button
                   key={index}
                   onClick={() => setSelectedImage(index)}
-                  className={`relative aspect-square overflow-hidden rounded-md border-2 transition-all ${
+                  className={`relative aspect-square w-full min-w-[60px] overflow-hidden rounded-md border-2 transition-all ${
                     selectedImage === index ? 'border-blue-500' : 'border-transparent'
                   }`}
                 >
@@ -258,6 +258,7 @@ const ProductContent = ({
                     alt={`${product.name} thumbnail ${index + 1}`}
                     fill
                     className="object-cover"
+                    sizes="(max-width: 640px) 25vw, 16.66vw"
                   />
                 </button>
               ))}
