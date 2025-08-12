@@ -4,21 +4,13 @@ import { Button } from '@/components/ui/button'
 import { useAdmin } from '@/hooks/use-admin'
 import { useCurrentUser } from '@/hooks/use-current-user'
 import { UserButton, useAuth } from '@clerk/nextjs'
-import { Plus, ShoppingCart } from 'lucide-react'
+import { ShoppingCart } from 'lucide-react'
 import Link from 'next/link'
-import { usePathname, useRouter } from 'next/navigation'
-
-const routes = [
-  { name: 'Home', path: '/' },
-  { name: 'Products', path: '/products' },
-]
 
 export function MainNav() {
-  const pathname = usePathname()
   const { userId, isLoaded: isAuthLoaded } = useAuth()
-  const { data: user, isLoading: isUserLoading } = useCurrentUser()
-  const { isAdmin, isLoading: isAuthLoading } = useAdmin()
-  const router = useRouter()
+  const { data: user } = useCurrentUser()
+  const { isAdmin } = useAdmin()
 
   return (
     <header className="border-b fixed top-0 left-0 right-0 z-50 bg-blue-300">
@@ -27,19 +19,6 @@ export function MainNav() {
           <Link href="/" className="text-2xl font-logo">
             HappyCrafts
           </Link>
-          {/* <nav className="hidden space-x-6 md:flex">
-            {routes.map((route) => (
-              <Link
-                key={route.path}
-                href={route.path}
-                className={`text-sm font-semibold transition-colors hover:text-primary ${
-                  pathname === route.path ? 'text-primary' : 'text-muted-foreground'
-                }`}
-              >
-                {route.name}
-              </Link>
-            ))}
-          </nav> */}
         </div>
 
         <div className="flex items-center space-x-4">

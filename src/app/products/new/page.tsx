@@ -1,21 +1,19 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
-import { useForm } from 'react-hook-form'
-import { useAdmin } from '@/hooks/use-admin'
-import { DevTools } from '@/components/dev-tools/DevTools'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { z } from 'zod'
-import { useState, useEffect, useCallback } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
-import { Label } from '@/components/ui/label'
-import { toast } from 'sonner'
-import { productSchema, productFormSchema } from '@/lib/form-utils'
-import { uploadFile, generateUniqueFilename, deleteFile } from '@/lib/supabase/storage'
-import { UploadCloud, Trash2, Star } from 'lucide-react'
+import { useAdmin } from '@/hooks/use-admin'
+import { productFormSchema } from '@/lib/form-utils'
 import { useAuth } from '@clerk/nextjs'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { Star, Trash2, UploadCloud } from 'lucide-react'
+import Image from 'next/image'
+import { useRouter } from 'next/navigation'
+import { useCallback, useEffect, useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
+import { z } from 'zod'
 
 type FormData = z.infer<typeof productFormSchema>
 
@@ -41,9 +39,7 @@ export default function AddProductPage() {
   
   const {
     register,
-    handleSubmit,
-    control,
-    formState: { errors, isSubmitting },
+    formState: { errors },
     watch,
     setValue,
     trigger,
@@ -388,7 +384,7 @@ export default function AddProductPage() {
       <div className="flex h-screen items-center justify-center">
         <div className="text-center">
           <h1 className="text-2xl font-bold">Access Denied</h1>
-          <p className="mt-2">You don't have permission to access this page.</p>
+          <p className="mt-2">You do not have permission to access this page.</p>
         </div>
       </div>
     );
@@ -399,7 +395,7 @@ export default function AddProductPage() {
   console.log('Form values:', formValues);
   
   return (
-    <div className="container mx-auto py-12">
+    <div className="container mx-auto py-12 backdrop-blur-xs">
       <h1 className="mb-8 text-3xl font-bold">Add New Product</h1>
       
       <form 
@@ -434,9 +430,9 @@ export default function AddProductPage() {
       >
         <div className="grid gap-6 md:grid-cols-2">
           {/* Form fields */}
-          <div className="space-y-6">
+          <div className="space-y-6 font-bold">
             <div>
-              <label htmlFor="name" className="mb-2 block text-sm font-medium">
+              <label htmlFor="name" className="mb-2 block text-sm ">
                 Product Name
               </label>
               <Input
@@ -451,7 +447,7 @@ export default function AddProductPage() {
             </div>
 
             <div>
-              <label htmlFor="company" className="mb-2 block text-sm font-medium">
+              <label htmlFor="company" className="mb-2 block text-sm ">
                 Company
               </label>
               <Input
@@ -466,7 +462,7 @@ export default function AddProductPage() {
             </div>
 
             <div>
-              <label htmlFor="price" className="mb-2 block text-sm font-medium">
+              <label htmlFor="price" className="mb-2 block text-sm ">
                 Price
               </label>
               <Input
@@ -483,7 +479,7 @@ export default function AddProductPage() {
             </div>
 
             <div>
-              <label htmlFor="description" className="mb-2 block text-sm font-medium">
+              <label htmlFor="description" className="mb-2 block text-sm ">
                 Description
               </label>
               <Textarea
@@ -501,7 +497,7 @@ export default function AddProductPage() {
 
           {/* Image Upload Section */}
           <div>
-            <h2 className="mb-4 text-xl font-semibold">Product Images</h2>
+            <h2 className="mb-4 text-xl ">Product Images</h2>
             
             {/* Drag and drop area */}
             <div 
@@ -599,9 +595,11 @@ export default function AddProductPage() {
                 <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
                   {previewUrls.map((preview, index) => (
                     <div key={index} className="group relative overflow-hidden rounded-lg border">
-                      <img
+                      <Image
                         src={preview.url}
                         alt={`Preview ${index + 1}`}
+                        width={200}
+                        height={200}
                         className="h-32 w-full object-cover"
                       />
                       <div className="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 transition-opacity group-hover:opacity-100">
@@ -662,7 +660,6 @@ export default function AddProductPage() {
           </Button>
         </div>
       </form>
-      <DevTools control={control} />
     </div>
   )
 }

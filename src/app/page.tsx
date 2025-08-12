@@ -43,7 +43,7 @@ export default function Home() {
           )}
       <div className="max-w-7xl mx-auto">        
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">Welcome to Leslie's Happy Crafts</h1>
+          <h1 className="text-4xl font-bold text-gray-900 mb-2">Welcome to Leslie&apos;s Happy Crafts</h1>
           <p className="text-lg text-gray-600 font-semibold">Come explore my amazing collection of crafts and gift ideas</p>
         </div>
 

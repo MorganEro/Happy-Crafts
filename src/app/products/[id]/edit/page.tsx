@@ -11,7 +11,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { ArrowLeft, UploadCloud } from 'lucide-react';
 import { useParams, useRouter } from 'next/navigation';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import { z } from 'zod';
@@ -37,12 +37,8 @@ const productFormSchema = z.object({
 type ProductFormValues = z.infer<typeof productFormSchema>;
 
 export default function EditProductPage() {
-  const { id } = useParams<{ id: string }>();
-  
-  if (!id) {
-    return <div>Loading...</div>;
-  }
-  
+  const params = useParams<{ id: string }>();
+  const id = params?.id;
   const router = useRouter();
   const queryClient = useQueryClient();
   const { getToken } = useAuth();
@@ -53,9 +49,14 @@ export default function EditProductPage() {
   const [isUploading, setIsUploading] = useState(false);
   const [previewUrls, setPreviewUrls] = useState<{url: string, isNew: boolean}[]>([]);
   const [mainImageIndex, setMainImageIndex] = useState(0);
+  
+  // Early return if no ID, but keep hooks at the top level
+  if (!id) {
+    return <div>Loading...</div>;
+  }
 
   // Handle file selection
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
     
     const files = Array.from(e.target.files);
@@ -66,7 +67,7 @@ export default function EditProductPage() {
     
     setSelectedFiles(prev => [...prev, ...files]);
     setPreviewUrls(prev => [...prev, ...newFiles.map(f => ({url: f.preview, isNew: true}))]);
-  };
+  }, []);
 
   // Get the JWT token when the component mounts
   useEffect(() => {
@@ -94,9 +95,6 @@ export default function EditProductPage() {
       mainImage: product?.image || (product?.images?.[0]?.url || '')
     },
   });
-  
-  const currentImages = watch('images') || [];
-
   // Update form default values when product data is loaded
   useEffect(() => {
     if (product) {

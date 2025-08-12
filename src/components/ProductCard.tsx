@@ -1,14 +1,13 @@
 'use client';
 
+import { Button } from '@/components/ui/button';
+import { useAdmin } from '@/hooks/use-admin';
+import { ProductWithRelations } from '@/services/products';
+import { Edit, Eye, Heart, ShoppingCart, Star, Trash2 } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Button } from '@/components/ui/button';
-import { Star, Heart, ShoppingCart, Eye, Edit, Trash2 } from 'lucide-react';
-import { ProductWithRelations } from '@/services/products';
-import { formatPrice } from '@/lib/utils';
-import { useAdmin } from '@/hooks/use-admin';
-import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
 
 interface ProductCardProps {
   product: ProductWithRelations

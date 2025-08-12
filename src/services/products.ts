@@ -1,5 +1,3 @@
-import { prisma } from '../lib/prisma'
-
 // In products.ts
 export type Review = {
   id: string;

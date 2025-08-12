@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
-import { Control } from 'react-hook-form';
+import { Control, FieldValues } from 'react-hook-form';
 
 // Dynamically import dev tools with SSR disabled
 const ReactQueryDevtools = dynamic(
@@ -15,8 +15,8 @@ const HookFormDevTool = dynamic(
   { ssr: false }
 );
 
-interface DevToolsProps {
-  control?: Control<any>;
+interface DevToolsProps<TFieldValues extends FieldValues = FieldValues> {
+  control?: Control<TFieldValues>;
 }
 
 /**

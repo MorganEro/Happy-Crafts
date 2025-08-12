@@ -2,65 +2,28 @@
 
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { getProductById, type ProductWithRelations, type ProductImage } from '@/services/products';
-import { useQuery, useQueryClient, type QueryClient } from '@tanstack/react-query';
+import { getProductById, type ProductWithRelations } from '@/services/products';
+import { useQuery } from '@tanstack/react-query';
 import { ArrowLeft, Edit, Heart, ShoppingCart, Star, Trash2 } from 'lucide-react';
 import Image from 'next/image';
-import { useParams, useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useRouter, useParams } from 'next/navigation';
+import { useState, useEffect, useCallback } from 'react';
 import { toast } from 'sonner';
 import { useAdmin } from '@/hooks/use-admin';
 
-// Extended type for the product with all required fields
-type SafeProduct = Omit<ProductWithRelations, 'reviews' | 'images' | 'likes'> & {
-  reviews: Array<{
-    id: string;
-    rating: number;
-    comment: string | null;
-    authorName: string | null;
-    authorImageUrl: string | null;
-    createdAt: Date | string;
-    updatedAt: Date | string | null;
-    customerId: string;
-    productId: string;
-  }>;
-  images: Array<{
-    id: string;
-    url: string;
-    altText: string | null;
-    isPrimary: boolean;
-    productId: string;
-    createdAt: Date | string;
-    updatedAt: Date | string;
-  }>;
-  likes: Array<{
-    id: string;
-    customerId: string;
-    productId: string;
-    createdAt: Date | string;
-  }>;
-  averageRating: number;
-  likeCount: number;
-  hasLiked: boolean;
-};
 
-// Type guard to check if an object is a valid ProductImage
-const isProductImage = (img: any): img is { url: string } => {
-  return img && typeof img === 'object' && 'url' in img && typeof img.url === 'string';
-};
+
 
 // Define the ProductContent props interface
 interface ProductContentProps {
   product: ProductWithRelations;
   isAdmin: boolean;
-  queryClient: QueryClient;
 }
 
 // Main component that handles data fetching
 const ProductDetailPage = () => {
   const { id } = useParams();
   const { isAdmin } = useAdmin();
-  const queryClient = useQueryClient();
   const router = useRouter();
 
   const {
@@ -100,52 +63,53 @@ const ProductDetailPage = () => {
     );
   }
 
-  return <ProductContent product={product} isAdmin={isAdmin} queryClient={queryClient} />;
+  return <ProductContent product={product} isAdmin={isAdmin} />;
 };
 
 // Component to render the actual product content
 const ProductContent = ({
   product,
   isAdmin = false,
-  queryClient,
 }: ProductContentProps) => {
-  if (!product) {
-    return (
-      <div className="container mx-auto px-4 py-8">
-        <p>Product not found</p>
-      </div>
-    );
-  }
-  const router = useRouter();
   const params = useParams();
+  const router = useRouter();
   const [selectedImage, setSelectedImage] = useState(0);
   const [isLiking, setIsLiking] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
-  const [galleryImages, setGalleryImages] = useState<string[]>(['/placeholder-product.jpg']);
+  const [galleryImages, setGalleryImages] = useState<string[]>([]);
+  
+  const id = params?.id;
+  
+  if (!id) {
+    return <div>Product not found</div>;
+  }
+
+  // Type guard for ProductImage
+  const isProductImage = useCallback((img: unknown): img is { url: string } => {
+    return Boolean(
+      img &&
+      typeof img === 'object' &&
+      'url' in img &&
+      typeof (img as { url: unknown }).url === 'string'
+    );
+  }, []);
 
   // Set up gallery images when product data is loaded
   useEffect(() => {
     try {
-      // Ensure we have a valid main image or use placeholder
+      if (!product) return;
+      
+      // Ensure we have a valid main image or use empty string
       const mainImage = (typeof product.image === 'string' && product.image.trim() !== '')
         ? product.image
-        : '/placeholder-product.jpg';
+        : '';
 
       // Safely get additional images
       const additionalImages = (Array.isArray(product.images) ? product.images : [])
-        .filter((img): img is ProductImage => 
-          img && 
-          typeof img === 'object' &&
-          'url' in img &&
-          typeof img.url === 'string' &&
-          img.url.trim() !== '' &&
-          'id' in img &&
-          'isPrimary' in img &&
-          'productId' in img
-        )
+        .filter(isProductImage)
         .map(img => img.url);
 
-      // Combine images, ensuring we have at least the placeholder
+      // Combine images
       const allImages = [mainImage, ...additionalImages]
         .filter((url): url is string => Boolean(url && url.trim() !== ''));
         
@@ -214,7 +178,7 @@ const ProductContent = ({
       <div className="mb-4 sm:mb-6">
         <Button
           variant="link"
-          onClick={() => router.back()}
+          onClick={() => router.push('/')}
           className="flex items-center gap-2 text-sm sm:text-base"
         >
           <ArrowLeft className="h-4 w-4" />
@@ -225,29 +189,33 @@ const ProductContent = ({
       <div className="grid gap-6 md:gap-8 md:grid-cols-2 p-4 sm:p-6 rounded-lg w-full mx-auto">
         {/* Product Images */}
         <div className="relative">
-          <div className="relative aspect-square w-full overflow-hidden">
-            {galleryImages[selectedImage] ? (
+          <div className="relative aspect-square w-full overflow-hidden bg-gray-100 rounded-lg">
+            {galleryImages.length > 0 && galleryImages[0] ? (
               <Image
-                src={galleryImages[selectedImage]}
+                src={galleryImages[selectedImage] || ''}
                 alt={product.name}
+                fill
                 sizes="(min-width: 768px) 50vw, 100vw"
-                className="object-cover rounded-lg"
+                className="object-cover"
                 priority
                 onError={(e) => {
                   const target = e.target as HTMLImageElement;
                   target.style.display = 'none';
                   const container = target.parentElement;
                   if (container) {
-                    const missingText = document.createElement('div');
-                    missingText.className = 'flex items-center justify-center h-full w-full bg-gray-100 text-gray-500';
-                    missingText.textContent = 'Image Not Available';
-                    container.appendChild(missingText);
+                    const existingFallback = container.querySelector('.image-fallback');
+                    if (!existingFallback) {
+                      const fallback = document.createElement('div');
+                      fallback.className = 'image-fallback flex items-center justify-center h-full w-full text-gray-500';
+                      fallback.textContent = 'Image Not Available';
+                      container.appendChild(fallback);
+                    }
                   }
                 }}
               />
             ) : (
-              <div className="flex items-center justify-center h-full w-full bg-gray-100 text-gray-500">
-                Image Not Available
+              <div className="flex items-center justify-center h-full w-full text-gray-500">
+                No Image Available
               </div>
             )}
             {galleryImages.length > 1 && (
@@ -351,7 +319,7 @@ const ProductContent = ({
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => router.push(`/admin/products/${product.id}/edit`)}
+                onClick={() => router.push(`/products/${product.id}/edit`)}
               >
                 <Edit className="mr-2 h-4 w-4" />
                 Edit

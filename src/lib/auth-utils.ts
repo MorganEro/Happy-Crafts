@@ -2,18 +2,7 @@ import { auth } from '@clerk/nextjs/server';
 
 // Extend the Clerk session type to include our custom metadata
 // Type for the authenticated session with Clerk
-type ClerkSession = Awaited<ReturnType<typeof auth>> & {
-  publicMetadata?: {
-    role?: string;
-    [key: string]: unknown;
-  };
-  sessionClaims?: {
-    metadata?: {
-      role?: string;
-      [key: string]: unknown;
-    };
-  };
-};
+
 
 export async function isAdmin(): Promise<boolean> {
   try {

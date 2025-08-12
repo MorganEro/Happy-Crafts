@@ -75,7 +75,27 @@ export async function GET(request: Request, ctx: RouteCtx) {
     const averageRating =
       reviews.length ? reviews.reduce((s, r) => s + (r.rating ?? 0), 0) / reviews.length : 0;
 
-    const responseData: any = {
+    // Define the response data type
+    type ProductResponse = Omit<ProductWithRelations, 'likes' | '_count'> & {
+      images: Array<{ id: string; url: string; altText: string | null; isPrimary: boolean; productId: string; createdAt: Date; updatedAt: Date; }>;
+      reviews: Array<{
+        id: string;
+        rating: number;
+        comment: string | null;
+        authorName: string | null;
+        authorImageUrl: string | null;
+        createdAt: Date;
+        updatedAt: Date | null;
+        customerId: string;
+        productId: string;
+      }>;
+      averageRating: number;
+      likeCount: number;
+      reviewCount: number;
+      hasLiked: boolean;
+    };
+
+    const responseData: ProductResponse = {
       ...product,
       images: product.images ?? [],
       reviews,
@@ -84,7 +104,9 @@ export async function GET(request: Request, ctx: RouteCtx) {
       reviewCount: product._count?.reviews ?? 0,
       hasLiked: false,
     };
-    delete responseData._count;
+    
+    // Remove the _count property as it's not needed in the response
+    delete (responseData as Partial<typeof responseData> & { _count?: unknown })._count;
 
     const session = await auth();
     const { userId: clerkId } = session;
@@ -124,8 +146,14 @@ export async function DELETE(
       await prisma.product.delete({
         where: { id: params.id },
       });
-    } catch (error: any) {
-      if (error?.code === 'P2025') { // Record not found
+    } catch (error: unknown) {
+      // Check if error is a Prisma error with code property
+      const isPrismaError = error && 
+                          typeof error === 'object' && 
+                          'code' in error && 
+                          typeof error.code === 'string';
+                          
+      if (isPrismaError && error.code === 'P2025') { // Record not found
         return NextResponse.json(
           { error: 'Product not found' },
           { status: 404 }
@@ -187,8 +215,14 @@ export async function PATCH(
       });
 
       return NextResponse.json(updatedProduct);
-    } catch (error: any) {
-      if (error?.code === 'P2025') { // Record not found
+    } catch (error: unknown) {
+      // Check if error is a Prisma error with code property
+      const isPrismaError = error && 
+                          typeof error === 'object' && 
+                          'code' in error && 
+                          typeof error.code === 'string';
+                          
+      if (isPrismaError && error.code === 'P2025') { // Record not found
         return NextResponse.json(
           { error: 'Product not found' },
           { status: 404 }

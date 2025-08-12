@@ -2,7 +2,6 @@ import { PrismaClient } from '@prisma/client';
 import { auth } from '@clerk/nextjs/server';
 
 declare global {
-  // eslint-disable-next-line no-var
   var prisma: PrismaClient | undefined;
 }
 

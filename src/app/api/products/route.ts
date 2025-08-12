@@ -21,7 +21,8 @@ export async function POST(request: Request) {
     // Check if user is admin using our utility
     try {
       await ensureAdmin();
-    } catch (error) {
+    } catch (err) {
+      console.error('Admin check failed:', err);
       return new NextResponse('Forbidden: Admin access required', { status: 403 });
     }
 
@@ -169,11 +170,8 @@ export async function GET() {
     });
 
     return NextResponse.json(productsWithStats);
-  } catch (error) {
-    console.error('Error fetching products:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch products' },
-      { status: 500 }
-    );
+  } catch (err) {
+    console.error('Error fetching products:', err);
+    return new NextResponse('Internal Server Error', { status: 500 });
   }
 }
