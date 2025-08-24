@@ -36,7 +36,7 @@ export default function Sidebar() {
   return (
     <aside
       className={[
-        'group/sidebar sticky top-0 h-svh border-r border-hc-cream/60 bg-hc-offwhite/95 backdrop-blur supports-[backdrop-filter]:bg-hc-offwhite/80',
+        'group/sidebar sticky top-0 h-svh border-r border backdrop-blur bg-sidebar',
         'transition-[width] duration-200 ease-in-out shrink-0',
         open ? 'w-72' : 'w-[4.25rem]',
       ].join(' ')}

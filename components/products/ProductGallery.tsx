@@ -36,7 +36,7 @@ export function ProductGallery({
   return (
     <div className={cn('w-full', className)}>
       {/* Large image */}
-      <div className="relative aspect-[4/3] overflow-hidden rounded-2xl ring-1 ring-border bg-hc-offwhite">
+      <div className="relative aspect-[4/3] overflow-hidden rounded-2xl ring-1 ring-border">
         <Image
           key={images[index]?.url}
           src={images[index]?.url}

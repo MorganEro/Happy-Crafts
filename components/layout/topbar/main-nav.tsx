@@ -8,18 +8,22 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { LuMenu } from 'react-icons/lu';
 import Container from '../Container';
+import { useTheme } from 'next-themes';
+import { Moon, Sun } from 'lucide-react';
 
 export function MainNav() {
   const { userId, isLoaded: isAuthLoaded } = useAuth();
   const isAdmin = useIsAdmin();
   const { user } = useUser();
   const { open, setOpen, isMobile } = useSidebar();
+  const { theme, resolvedTheme, setTheme } = useTheme();
+  const isDark = (theme ?? resolvedTheme) === 'dark';
 
   return (
-    <header className="sticky top-0 z-40 flex items-center border-b border-hc-cream bg-hc-offwhite/80 backdrop-blur px-2 h-15">
+    <header className="sticky top-0 z-40 flex items-center border-b backdrop-blur px-2 h-15 bg-sidebar">
       <Container className="w-full flex items-center">
         {!open && (
-          <div className="mr-2">
+          <div className="mr-2 bg-hc-asphalt/30 rounded-sm p-1.5 border">
             <Link href="/">
               <Image
                 src="/logo.svg"
@@ -51,8 +55,25 @@ export function MainNav() {
                               userButtonPopoverCard: 'rounded-lg shadow-xl', // dropdown menu card
                               userButtonPopoverFooter: 'bg-gray-50', // footer
                             },
-                          }}
-                        />
+                          }}>
+                          <UserButton.MenuItems>
+                            <UserButton.Action
+                              label={isDark ? 'Light mode' : 'Dark mode'}
+                              labelIcon={
+                                isDark ? (
+                                  <Sun className="h-4 w-4" />
+                                ) : (
+                                  <Moon className="h-4 w-4" />
+                                )
+                              }
+                              onClick={() =>
+                                setTheme(isDark ? 'light' : 'dark')
+                              }
+                            />
+                            {/* You can add more items here, links, separators, etc. */}
+                            {/* <UserButton.Link label="Settings" href="/settings" labelIcon={<Settings />} /> */}
+                          </UserButton.MenuItems>
+                        </UserButton>
                         Admin
                       </span>
                     )}
@@ -64,8 +85,23 @@ export function MainNav() {
                             userButtonPopoverCard: 'rounded-lg shadow-xl', // dropdown menu card
                             userButtonPopoverFooter: 'bg-gray-50', // footer
                           },
-                        }}
-                      />
+                        }}>
+                        <UserButton.MenuItems>
+                          <UserButton.Action
+                            label={isDark ? 'Light mode' : 'Dark mode'}
+                            labelIcon={
+                              isDark ? (
+                                <Sun className="h-4 w-4" />
+                              ) : (
+                                <Moon className="h-4 w-4" />
+                              )
+                            }
+                            onClick={() => setTheme(isDark ? 'light' : 'dark')}
+                          />
+                          {/* You can add more items here, links, separators, etc. */}
+                          {/* <UserButton.Link label="Settings" href="/settings" labelIcon={<Settings />} /> */}
+                        </UserButton.MenuItems>
+                      </UserButton>
                     )}
                     {/* MOBILE: open sidebar button */}
                     {isMobile && (
@@ -73,9 +109,9 @@ export function MainNav() {
                         variant="ghost"
                         size="icon"
                         onClick={() => setOpen(true)}
-                        className="hover:bg-hc-cream"
+                        className="hover:bg-hc-cream border"
                         aria-label="Open sidebar">
-                        <LuMenu className="h-10 w-10" />
+                        <LuMenu className="h-14 w-14" />
                       </Button>
                     )}
                   </div>

@@ -106,47 +106,87 @@
   --sidebar-border: #e6e0d7;
   --sidebar-ring: var(--hc-blue-600);
 }
-
 .dark {
-  --background: var(--hc-asphalt); /* #383E42 */
-  --foreground: var(--hc-offwhite);
+  /* Base surfaces & text */
+  --background: var(--hc-asphalt); /* deep cool gray */
+  --foreground: var(--hc-offwhite); /* warm off-white for text */
 
-  --card: #2e3438;
+  /* Elevations (slightly separated from background) */
+  --card: color-mix(in srgb, var(--hc-asphalt) 85%, white 15%); /* ~#40474B */
   --card-foreground: var(--hc-offwhite);
 
-  --popover: #2e3438;
+  --popover: color-mix(
+    in srgb,
+    var(--hc-asphalt) 82%,
+    white 18%
+  ); /* a touch lighter than card */
   --popover-foreground: var(--hc-offwhite);
 
-  --primary: var(--hc-blue-600);
+  /* Brand actions */
+  --primary: var(--hc-blue-600); /* #4278AD */
   --primary-foreground: var(--hc-offwhite);
 
-  --secondary: var(--hc-blue-400);
-  --secondary-foreground: #0f1316;
+  --secondary: var(--hc-blue-400); /* #7F94AD */
+  /* Dark text on the lighter secondary chip/button keeps contrast high */
+  --secondary-foreground: color-mix(in srgb, var(--hc-asphalt) 92%, black 8%);
 
-  --muted: #30363a; /* subdued surface */
-  --muted-foreground: #c9d0d3;
+  /* Muted / subtle blocks (keep warmth from cream but stay dark) */
+  --muted: color-mix(in srgb, var(--hc-asphalt) 85%, var(--hc-cream) 15%);
+  --muted-foreground: color-mix(
+    in srgb,
+    var(--hc-offwhite) 78%,
+    var(--hc-cream) 22%
+  );
 
+  /* Accent (rustic orange) */
   --accent: var(--hc-orange);
   --accent-foreground: var(--hc-offwhite);
 
-  --destructive: var(--hc-orange);
-  --border: #3d4448;
-  --input: #3d4448;
+  /* Destructive — keep earthy, but distinct from accent */
+  --destructive: color-mix(in srgb, var(--hc-orange) 40%, #b7412e 60%);
+
+  /* Lines / inputs (low-contrast but visible; warmer than pure gray) */
+  --border: color-mix(
+    in srgb,
+    var(--hc-asphalt) 70%,
+    var(--hc-cream) 30%
+  ); /* ~#6A7074 */
+  --input: color-mix(
+    in srgb,
+    var(--hc-asphalt) 75%,
+    var(--hc-cream) 25%
+  ); /* ~#5B6165 */
+
+  /* Focus ring keeps the brand blue pop */
   --ring: var(--hc-blue-600);
 
+  /* Charts (unchanged hues for consistency) */
   --chart-1: var(--hc-blue-600);
   --chart-2: var(--hc-blue-400);
   --chart-3: var(--hc-teal-500);
   --chart-4: var(--hc-tan);
   --chart-5: var(--hc-orange);
 
-  --sidebar: #2e3438;
+  /* Sidebar */
+  --sidebar: color-mix(
+    in srgb,
+    var(--hc-asphalt) 88%,
+    white 12%
+  ); /* slightly above bg */
   --sidebar-foreground: var(--hc-offwhite);
   --sidebar-primary: var(--hc-blue-600);
   --sidebar-primary-foreground: var(--hc-offwhite);
-  --sidebar-accent: #30363a;
+  --sidebar-accent: color-mix(
+    in srgb,
+    var(--hc-asphalt) 82%,
+    var(--hc-cream) 18%
+  );
   --sidebar-accent-foreground: var(--hc-offwhite);
-  --sidebar-border: #3d4448;
+  --sidebar-border: color-mix(
+    in srgb,
+    var(--hc-asphalt) 68%,
+    var(--hc-cream) 32%
+  );
   --sidebar-ring: var(--hc-blue-600);
 }
 
@@ -171,7 +211,6 @@
   h6 {
     font-family: var(--font-faculty_glyphic), system-ui, -apple-system,
       sans-serif;
-    color: oklch(12.9% 0.042 264.695);
   }
 
   .font-plaster {

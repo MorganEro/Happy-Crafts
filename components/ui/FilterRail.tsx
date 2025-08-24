@@ -49,12 +49,6 @@ export function FilterRail({
           'scrollbar-none snap-x snap-mandatory',
           'scroll-px-4 px-1' // scroll padding (snap endpoints) + visual padding
         )}>
-        {/* start spacer so first chip isn't flush/cut */}
-        {/* <span
-          aria-hidden
-          className="shrink-0 w-4"
-        /> */}
-
         {items.map(val => {
           const active = val === activeValue;
           return (
@@ -69,16 +63,16 @@ export function FilterRail({
                   ? 'bg-hc-cream ring-2 ring-hc-orange text-hc-asphalt'
                   : 'hover:bg-hc-offwhite text-hc-asphalt'
               )}>
-              <span className="capitalize">{val}</span>
+              <span
+                className={cn(
+                  'capitalize text-muted-foreground',
+                  active ? ' text-hc-asphalt' : ''
+                )}>
+                {val}
+              </span>
             </Link>
           );
         })}
-
-        {/* end spacer so last chip isn't flush/cut */}
-        {/* <span
-          aria-hidden
-          className="shrink-0 w-1"
-        /> */}
       </div>
     </div>
   );

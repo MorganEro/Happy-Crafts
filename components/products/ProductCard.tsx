@@ -50,7 +50,7 @@ export function ProductCard({ id, name, imageUrl, className }: Props) {
         />
       </div>
       <div className="p-3 flex justify-between items-center">
-        <h3 className="text-sm md:text-base font-medium text-hc-asphalt line-clamp-2">
+        <h3 className="text-sm md:text-base font-medium text-foreground line-clamp-2">
           {name}
         </h3>
         {isAdmin && (

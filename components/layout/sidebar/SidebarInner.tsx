@@ -8,9 +8,11 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import { useSidebar } from '@/context/sidebar-context';
-import { ChevronRight, Package, Plus, Quote } from 'lucide-react';
+import { Package, Plus } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { BsLayoutSidebar } from 'react-icons/bs';
+import { FaRegCommentAlt } from 'react-icons/fa';
 import { AdminOnly } from '../navItems/AdminOnly';
 import FavoritesItem from '../navItems/FavoritesItem';
 import NavItem from '../navItems/NavItem';
@@ -23,7 +25,7 @@ function SidebarInner() {
   return (
     <div className="flex h-full flex-col">
       {/* Header */}
-      <div className="flex items-center gap-2 px-3 py-3 border-b border-hc-cream">
+      <div className="flex items-center gap-2 px-3  border-b h-15">
         {open && (
           <div className="ml-3 flex-1">
             <Link href="/">
@@ -41,13 +43,12 @@ function SidebarInner() {
             <TooltipTrigger asChild>
               <Button
                 variant="ghost"
-                size="icon"
                 onClick={toggle}
                 aria-label={open ? 'Collapse sidebar' : 'Expand sidebar'}
-                className="hidden lg:inline-flex shrink-0 hover:bg-hc-cream" // desktop only
+                className="hidden lg:inline-flex shrink-0" // desktop only
               >
-                <ChevronRight
-                  className={`h-5 w-5 ${open ? 'rotate-180' : ''}`}
+                <BsLayoutSidebar
+                  className={`h-8 w-8 ${open ? 'rotate-180' : ''}`}
                 />
               </Button>
             </TooltipTrigger>
@@ -61,63 +62,69 @@ function SidebarInner() {
       </div>
 
       {/* Nav */}
-      <ScrollArea className="flex-1">
-        <nav className="py-2">
-          <SectionLabel hidden={!open}>Browse</SectionLabel>
-          <ul className="px-2 space-y-1">
-            <li>
-              <FavoritesItem />
-            </li>
-            <li>
-              <NavItem
-                href="/products"
-                icon={<Package className="h-5 w-5" />}
-                label="Products"
-                activeWhen={path => {
-                  if (!path.startsWith('/products')) return false;
-                  const parts = path.split('/').filter(Boolean); // e.g. ['products', 'favorites']
-                  const seg = parts[1] ?? ''; // segment after 'products'
-                  const reserved = new Set(['favorites', 'tags', 'categories']);
-                  return seg === '' || !reserved.has(seg); // root or product detail
-                }}
-              />
-            </li>
-            <li>
-              <NavItem
-                href="/reviews"
-                icon={<Quote className="h-5 w-5" />}
-                label="Reviews"
-                activeWhen={pathname => pathname.startsWith('/reviews')}
-              />
-            </li>
-          </ul>
-
-          <div className={!open ? 'hidden' : ''}>
-            <div className="my-3 px-2">
-              <Separator className="bg-hc-cream" />
-            </div>
-            <SidebarTaxonomy />
-          </div>
-
-          <AdminOnly>
-            <div className="my-3 px-2">
-              <Separator className="bg-hc-cream" />
-            </div>
+      <ScrollArea className="flex-1 overflow-hidden mt-5">
+        <div className="max-w-[90%] min-w-0">
+          <nav className="flex flex-col w-full max-w-full min-w-0 overflow-x-hidden box-border">
+            <SectionLabel hidden={!open}>Browse</SectionLabel>
             <ul className="px-2 space-y-1">
-              <li className="w-[75%]">
+              <li>
+                <FavoritesItem />
+              </li>
+              <li>
                 <NavItem
-                  href="/admin/products/create"
-                  icon={<Plus className="h-5 w-5" />}
-                  label="New Product"
+                  href="/products"
+                  icon={<Package className="h-5 w-5" />}
+                  label="Products"
+                  activeWhen={path => {
+                    if (!path.startsWith('/products')) return false;
+                    const parts = path.split('/').filter(Boolean); // e.g. ['products', 'favorites']
+                    const seg = parts[1] ?? ''; // segment after 'products'
+                    const reserved = new Set([
+                      'favorites',
+                      'tags',
+                      'categories',
+                    ]);
+                    return seg === '' || !reserved.has(seg); // root or product detail
+                  }}
+                />
+              </li>
+              <li>
+                <NavItem
+                  href="/reviews"
+                  icon={<FaRegCommentAlt className="h-5 w-5" />}
+                  label="Reviews"
+                  activeWhen={pathname => pathname.startsWith('/reviews')}
                 />
               </li>
             </ul>
-          </AdminOnly>
-        </nav>
+
+            <div className={!open ? 'hidden' : ''}>
+              <div className="my-3 px-2">
+                <Separator />
+              </div>
+              <SidebarTaxonomy />
+            </div>
+
+            <AdminOnly>
+              <div className="my-3 px-2">
+                <Separator />
+              </div>
+              <ul className="px-2 space-y-1">
+                <li className="w-[75%]">
+                  <NavItem
+                    href="/admin/products/create"
+                    icon={<Plus className="h-5 w-5" />}
+                    label="New Product"
+                  />
+                </li>
+              </ul>
+            </AdminOnly>
+          </nav>
+        </div>
       </ScrollArea>
 
       {/* Footnote */}
-      <div className="border-t border-hc-cream p-3 text-[11px] tracking-wide text-hc-asphalt/80">
+      <div className="border-t border p-3 text-[11px] tracking-wide text-foreground">
         <span className="hidden lg:inline">Crafted with Love</span>
       </div>
     </div>

@@ -10,7 +10,7 @@ function AllReviewsLink() {
         <Link
           className="mt-4 capitalize"
           href={`/reviews`}>
-          View All Reviews
+          See All Reviews
         </Link>
       </Button>
     </div>

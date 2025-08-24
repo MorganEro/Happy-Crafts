@@ -24,21 +24,17 @@ async function ProductDetailPage({
       : [{ url: product.image, alt: product.name }];
 
   return (
-    <div className="max-w-6xl mx-auto pt-8 px-4">
+    <div className="max-w-6xl mx-auto pt-8 pb-12 px-4">
       <BreadCrumbs
         previousName="Products"
         previousLink="/products"
         currentName={product.name}
       />
-      <div className="flex items-start justify-between gap-4">
-        <PageHeader
-          title={product.name}
-          subtitle={product.category}
-        />
-        <FavoriteToggleButton productId={product.id} />
-      </div>
+      <PageHeader
+        title={product.name}
+        subtitle={product.category}
+      />
       <Separator className="mb-8" />
-
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {/* Gallery */}
         <ProductGallery images={galleryImages} />
@@ -46,10 +42,13 @@ async function ProductDetailPage({
         {/* Details (no price/company per your request) */}
         <div className="space-y-6">
           <section className="space-y-3">
-            <h2 className="text-xl font-semibold text-hc-asphalt">
-              Description
-            </h2>
-            <p className="text-base leading-relaxed text-hc-asphalt whitespace-pre-wrap">
+            <div className="flex gap-8 items-center">
+              <h2 className="text-xl text-hc-teal-500 tracking-wide">
+                Description
+              </h2>
+              <FavoriteToggleButton productId={product.id} />
+            </div>
+            <p className="text-base leading-relaxed text-foreground whitespace-pre-wrap">
               {product.description}
             </p>
           </section>

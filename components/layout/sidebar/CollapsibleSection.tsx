@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/collapsible';
 import NavItem from '@/components/layout/navItems/NavItem';
 import { useSidebar } from '@/context/sidebar-context';
-import { ChevronDown } from 'lucide-react';
+import { IoMdArrowDropdown } from 'react-icons/io';
 
 type Item = { href: string; label: string };
 
@@ -35,11 +35,14 @@ export default function CollapsibleSection({
     <Collapsible
       open={expanded}
       onOpenChange={setExpanded}>
-      <div className="flex items-center px-2">
+      <div className="flex min-w-0 items-center px-2">
         <CollapsibleTrigger asChild>
           <button
             type="button"
-            className="flex w-full items-center gap-3 rounded-xl px-3 py-2 text-left text-sm hover:bg-hc-cream focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-hc-blue-600"
+            className={[
+              'flex w-full text-foreground items-center gap-3 rounded-xl px-3 py-2 text-left text-sm hover:bg-hc-cream/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-hc-blue-600',
+              'overflow-hidden max-w-full box-border',
+            ].join(' ')}
             aria-expanded={expanded}
             aria-controls={panelId}>
             <span
@@ -47,14 +50,16 @@ export default function CollapsibleSection({
               className="shrink-0 opacity-90">
               {icon}
             </span>
-            <span className={sidebarOpen ? 'truncate' : 'sr-only'}>
+            <span
+              className={sidebarOpen ? 'min-w-0 flex-1 truncate' : 'sr-only'}
+              title={title}>
               {title}
             </span>
 
             {sidebarOpen && (
-              <span className="ml-auto inline-flex items-center">
-                <ChevronDown
-                  className={`h-4 w-4 transition-transform duration-200 ${
+              <span className="ml-auto inline-flex items-center text-foreground">
+                <IoMdArrowDropdown
+                  className={`h-5 w-5 transition-transform duration-200 ${
                     expanded ? 'rotate-180' : ''
                   }`}
                   aria-hidden="true"
@@ -66,15 +71,13 @@ export default function CollapsibleSection({
       </div>
 
       <CollapsibleContent id={panelId}>
-        <ul className="mt-1 space-y-1 px-2 capitalize ms-8 ">
+        <ul className="mt-1 space-y-1 px-2 capitalize min-w-0 box-border">
           {items.map(it => {
             // ensure absolute path
             const href = it.href.startsWith('/') ? it.href : `/${it.href}`;
 
             return (
-              <li
-                key={`${href}-${it.label}`}
-                className="w-[75%]">
+              <li key={`${href}-${it.label}`}>
                 <NavItem
                   href={href}
                   icon={

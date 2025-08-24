@@ -30,18 +30,27 @@ function NavItem({
     <Link
       href={href}
       className={[
-        'group flex items-center gap-3 rounded-xl px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-hc-blue-600',
+        'group flex w-full min-w-0 items-center gap-3 rounded-xl px-3 py-2 text-sm',
+        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-hc-blue-600',
         active
           ? 'bg-hc-cream/50 text-hc-asphalt'
-          : 'text-hc-asphalt hover:bg-hc-cream',
+          : 'text-hc-asphalt hover:bg-hc-cream/50',
         highlight ? 'ring-1 ring-hc-orange/40' : '',
       ].join(' ')}>
       <span
         aria-hidden
-        className="shrink-0 opacity-90">
+        className="shrink-0 opacity-90 text-foreground">
         {icon}
       </span>
-      <span className={open ? 'truncate' : 'sr-only'}>{label}</span>
+      <span
+        className={
+          open
+            ? 'min-w-0 flex-1 truncate break-words text-foreground'
+            : 'sr-only'
+        }
+        title={label}>
+        {label}
+      </span>
     </Link>
   );
 }

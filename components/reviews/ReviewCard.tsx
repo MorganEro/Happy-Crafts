@@ -24,7 +24,7 @@ export function ReviewCard({ review }: { review: Review }) {
   const date = new Date(review.createdAt);
 
   return (
-    <article className="rounded-2xl border p-4 bg-hc-offwhite">
+    <article className="rounded-2xl border p-4 bg-hc-teal-500/5">
       <div className="flex items-start gap-3">
         <div className="relative h-10 w-10 overflow-hidden rounded-full ring-1 ring-border">
           {review.authorImageUrl ? (
@@ -42,7 +42,7 @@ export function ReviewCard({ review }: { review: Review }) {
         <div className="flex-1">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-hc-asphalt">
+              <p className="text-sm font-medium text-foreground">
                 {review.authorName}
               </p>
               <p className="text-xs text-muted-foreground">

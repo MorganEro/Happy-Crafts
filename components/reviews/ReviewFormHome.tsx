@@ -43,7 +43,7 @@ export function ReviewFormHome() {
 
   if (!user) {
     return (
-      <div className="rounded-2xl border p-4 bg-hc-offwhite text-hc-asphalt">
+      <div className="rounded-2xl border p-4 bg-hc-teal-500/5">
         <p className="text-sm mb-3">Please sign in to leave a review.</p>
         <SignInButton mode="modal">
           <Button
@@ -62,7 +62,7 @@ export function ReviewFormHome() {
 
   if (myReview) {
     return (
-      <section className="rounded-2xl border bg-hc-blue-400/10 shadow-sm max-w-6xl mx-auto p-6 mb-12">
+      <section className="max-w-6xl mx-auto mb-12">
         <ReviewCard review={myReview} />
         <AllReviewsLink />
       </section>
@@ -70,7 +70,7 @@ export function ReviewFormHome() {
   }
 
   return (
-    <section className="rounded-2xl border bg-hc-blue-400/10 shadow-sm max-w-6xl mx-auto p-6 mb-12">
+    <section className="rounded-2xl border bg-hc-teal-500/5 shadow-sm max-w-6xl mx-auto p-6 mb-12">
       <div className="p-4">
         <h2 className="text-hc-blue-600 text-lg font-medium">Leave a review</h2>
         <p className="text-sm text-muted-foreground">One review per user.</p>
