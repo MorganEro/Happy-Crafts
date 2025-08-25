@@ -118,8 +118,8 @@ const EditProductClient = ({ productId, defaults }: Props) => {
           onSubmit={form.handleSubmit(onSubmit)}
           className="space-y-8">
           {/* Basics */}
-          <section className="space-y-6 rounded-2xl border bg-hc-offwhite p-6">
-            <h2 className="text-xl font-semibold text-hc-asphalt">Basics</h2>
+          <section className="space-y-6 rounded-2xl border bg-background p-6">
+            <h2 className="text-xl font-semibold text-foreground">Basics</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <FormField
                 control={form.control}
@@ -214,7 +214,7 @@ const EditProductClient = ({ productId, defaults }: Props) => {
 
           {/* Metadata */}
           <section className="space-y-6 rounded-2xl border p-6">
-            <h2 className="text-xl font-semibold text-hc-asphalt">Metadata</h2>
+            <h2 className="text-xl font-semibold text-foreground">Metadata</h2>
 
             <FormField
               control={form.control}
@@ -277,7 +277,7 @@ const EditProductClient = ({ productId, defaults }: Props) => {
           {/* Images */}
           <section className="space-y-6 rounded-2xl border p-6">
             <div className="flex items-center justify-between">
-              <h2 className="text-xl font-semibold text-hc-asphalt">Images</h2>
+              <h2 className="text-xl font-semibold text-foreground">Images</h2>
               <span className="text-sm text-muted-foreground">
                 Pick a new main if needed.
               </span>

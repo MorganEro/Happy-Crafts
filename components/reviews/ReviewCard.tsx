@@ -61,8 +61,9 @@ export function ReviewCard({ review }: { review: Review }) {
             <div className="mt-3 flex justify-end">
               <Button
                 type="button"
+                size="sm"
                 variant="outline"
-                className="text-red-600 border-red-200 hover:bg-red-50"
+                className="text-destructive border-destructive/80 hover:bg-destructive/15 hover:text-destructive"
                 onClick={() => deleteReview(review.id)}
                 disabled={isPending}>
                 {isPending ? 'Deleting…' : 'Delete review'}

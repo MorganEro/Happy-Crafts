@@ -110,7 +110,7 @@ function SidebarInner() {
                 <Separator />
               </div>
               <ul className="px-2 space-y-1">
-                <li className="w-[75%]">
+                <li className="flex items-center justify-center">
                   <NavItem
                     href="/admin/products/create"
                     icon={<Plus className="h-5 w-5" />}

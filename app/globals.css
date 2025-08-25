@@ -4,7 +4,7 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
-  --font-faculty_glyphic: var(--font-faculty_glyphic);
+  --font-marcellus: var(--font-marcellus);
   --font-raleway: var(--font-raleway);
   --font-molle: var(--font-molle);
   --font-mr_bedfort: var(--font-mr_bedfort);
@@ -84,7 +84,7 @@
   --accent: var(--hc-orange);
   --accent-foreground: var(--hc-offwhite);
 
-  --destructive: red;
+  --destructive: rgb(204, 71, 71);
   --border: #e6e0d7; /* soft line that fits the cream */
   --input: #676f74a2;
   --ring: var(--hc-blue-600);
@@ -209,8 +209,7 @@
   h4,
   h5,
   h6 {
-    font-family: var(--font-faculty_glyphic), system-ui, -apple-system,
-      sans-serif;
+    font-family: var(--font-marcellus), system-ui, -apple-system, sans-serif;
   }
 
   .font-plaster {

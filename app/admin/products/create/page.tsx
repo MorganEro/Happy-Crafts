@@ -109,7 +109,7 @@ export default function CreateProductPage() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto py-8 px-4">
+    <div className="max-w-4xl mx-auto pt-8 px-4">
       <PageHeader title="Create New Product" />
 
       <Form {...form}>
@@ -126,8 +126,8 @@ export default function CreateProductPage() {
           )}
           className="space-y-8">
           {/* Essentials */}
-          <section className="space-y-6 rounded-2xl border bg-hc-offwhite p-6">
-            <h2 className="text-xl font-semibold text-hc-asphalt">Basics</h2>
+          <section className="space-y-6 rounded-2xl border bg-background p-6">
+            <h2 className="text-xl font-semibold text-foreground">Basics</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <FormField
                 control={form.control}
@@ -229,7 +229,7 @@ export default function CreateProductPage() {
 
           {/* Metadata */}
           <section className="space-y-6 rounded-2xl border p-6">
-            <h2 className="text-xl font-semibold text-hc-asphalt">Metadata</h2>
+            <h2 className="text-xl font-semibold text-foreground">Metadata</h2>
 
             {/* Options as chips */}
             <FormField
@@ -326,7 +326,7 @@ export default function CreateProductPage() {
 
           <section className="space-y-6 rounded-2xl border p-6">
             <div className="flex items-center justify-between">
-              <h2 className="text-xl font-semibold text-hc-asphalt">Images</h2>
+              <h2 className="text-xl font-semibold text-foreground">Images</h2>
               <span className="text-sm text-muted-foreground">
                 Select one image as <strong>Main</strong>.
               </span>

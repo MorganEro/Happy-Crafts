@@ -16,7 +16,9 @@ export function PageHeader({
 }: PageHeaderProps) {
   return (
     <header className={cn('mb-4 bg-teal-500/5 p-4 rounded-lg', className)}>
-      <h1 className="text-3xl font-bold text-hc-blue-600 uppercase">{title}</h1>
+      <h1 className="text-3xl font-bold text-hc-blue-600 capitalize tracking-wide ">
+        {title}
+      </h1>
       {subtitle && <p className="text-hc-teal-500 capitalize">{subtitle}</p>}
       {children}
     </header>

@@ -24,7 +24,6 @@ export function Providers({
     <QueryClientProvider client={queryClient}>
       <HydrationBoundary state={state}>
         <Toaster
-          richColors
           expand
           visibleToasts={1}
         />

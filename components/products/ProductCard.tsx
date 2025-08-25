@@ -23,7 +23,7 @@ export function ProductCard({ id, name, imageUrl, className }: Props) {
 
   const handleEditClick = (e: React.MouseEvent) => {
     e.stopPropagation();
-    router.push(`/products/${id}/edit`);
+    router.push(`/admin/products/${id}/edit`);
   };
 
   return (

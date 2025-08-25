@@ -11,7 +11,7 @@ import { auth } from '@clerk/nextjs/server';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import type { Metadata } from 'next';
 import {
-  Faculty_Glyphic,
+  Marcellus,
   Molle,
   Mr_Bedfort,
   Plaster,
@@ -36,12 +36,12 @@ const raleway = Raleway({
   variable: '--font-raleway',
 });
 
-// Load Rum Raisin for decorative elements
-const faculty_glyphic = Faculty_Glyphic({
+// Load Marcellus for decorative elements
+const marcellus = Marcellus({
   weight: '400',
   subsets: ['latin'],
   display: 'swap',
-  variable: '--font-faculty_glyphic',
+  variable: '--font-marcellus',
 });
 
 // Load Plaster for decorative elements
@@ -64,7 +64,7 @@ const mr_bedfort = Mr_Bedfort({
 const fontVariables = [
   molle.variable,
   raleway.variable,
-  faculty_glyphic.variable,
+  marcellus.variable,
   plaster.variable,
   mr_bedfort.variable,
 ].join(' ');

@@ -42,7 +42,7 @@ export function useCreateReview() {
       return res.reviewId;
     },
     onSuccess: () => {
-      toast.success('Thanks for your review!');
+      toast('Thanks for your review!');
       qc.invalidateQueries({ queryKey: ['review', 'user', userId] }); // ⬅️ same key
     },
     onError: (e: unknown) => {
@@ -71,7 +71,7 @@ export function useDeleteReview() {
       return res.json() as Promise<{ message: string }>;
     },
     onSuccess: data => {
-      toast.success(data.message);
+      toast(data.message);
       qc.invalidateQueries({ queryKey: ['review', 'user', userId] });
       qc.invalidateQueries({ queryKey: ['reviews', 'all'] });
     },

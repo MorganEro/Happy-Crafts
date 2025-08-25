@@ -42,11 +42,7 @@ export default function FavoriteToggleButton({
   }, [initialFavoriteId]);
 
   if (isQueryLoading) {
-    return (
-      <div className="flex justify-center p-2">
-        <Spinner />
-      </div>
-    );
+    return <Spinner />;
   }
 
   if (!user) {

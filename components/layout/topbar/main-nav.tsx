@@ -41,17 +41,18 @@ export function MainNav() {
               {userId ? (
                 <div className="flex items-center gap-4">
                   <div className="text-center">
-                    <p className="font-bold capitalize">
+                    <p className="text-sm font-bold capitalize text-hc-orange/80">
                       Welcome, {user?.username || user?.firstName || 'User'}
                     </p>
                   </div>
                   <div className="flex items-center gap-2">
                     {isAdmin && (
-                      <span className="rounded-full border border-primary/20 bg-primary/10 p-1.5 text-xs font-bold text-primary flex items-center gap-2">
+                      <span className="rounded-full border border-hc-orange/20 bg-hc-orange/10 p-1.5 text-xs font-semibold text-hc-orange/80 flex items-center gap-2">
                         <UserButton
                           appearance={{
                             elements: {
-                              avatarBox: 'h-12 w-12 border-3 border-white/30', // user avatar
+                              avatarBox:
+                                'h-12 w-12 border-3 border-foreground/30', // user avatar
                               userButtonPopoverCard: 'rounded-lg shadow-xl', // dropdown menu card
                               userButtonPopoverFooter: 'bg-gray-50', // footer
                             },
@@ -81,7 +82,8 @@ export function MainNav() {
                       <UserButton
                         appearance={{
                           elements: {
-                            avatarBox: 'h-10 w-10 border-2 border-white', // user avatar
+                            avatarBox:
+                              'h-12 w-12 border-3 border-foreground/30', // user avatar
                             userButtonPopoverCard: 'rounded-lg shadow-xl', // dropdown menu card
                             userButtonPopoverFooter: 'bg-gray-50', // footer
                           },
@@ -111,7 +113,7 @@ export function MainNav() {
                         onClick={() => setOpen(true)}
                         className="hover:bg-hc-cream border"
                         aria-label="Open sidebar">
-                        <LuMenu className="h-14 w-14" />
+                        <LuMenu className="h-14 w-14 " />
                       </Button>
                     )}
                   </div>

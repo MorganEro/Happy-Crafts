@@ -30,10 +30,10 @@ function CategorySection() {
         <section
           key={category}
           className=" border p-6 rounded-2xl bg-hc-cream/10 shadow-sm">
-          <h2 className="text-hc-blue-600 text-2xl mb-6 px-6 sm:px-4 lg:px-8 capitalize">
+          <h2 className="text-hc-blue-600 text-2xl mb-6 capitalize">
             {category}
           </h2>
-          <div className="flex overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none'] gap-4 px-6 sm:px-4 lg:px-8 pb-4">
+          <div className="flex overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none'] gap-4 pb-4">
             {productsByCategory[category]?.slice(0, 5).map(product => (
               <ProductCard
                 key={product.id}
@@ -46,7 +46,7 @@ function CategorySection() {
           </div>
           <Link
             href={`/products/categories/${categoryToSlug(category)}`}
-            className=" text-primary hover:underline ps-8 capitalize">
+            className=" text-primary hover:underline capitalize">
             View All {category} Products
           </Link>
         </section>

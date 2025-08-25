@@ -21,7 +21,7 @@ export default function Sidebar() {
         onOpenChange={setOpen}>
         <SheetContent
           side="left"
-          className="p-0 w-72 bg-hc-offwhite text-hc-asphalt"
+          className="p-0 w-72 bg-sidebar"
           aria-describedby={undefined}>
           <SheetHeader className="sr-only">
             <SheetTitle>Navigation</SheetTitle>
