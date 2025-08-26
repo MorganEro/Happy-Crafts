@@ -134,8 +134,8 @@
   --muted: color-mix(in srgb, var(--hc-asphalt) 85%, var(--hc-cream) 15%);
   --muted-foreground: color-mix(
     in srgb,
-    var(--hc-offwhite) 78%,
-    var(--hc-cream) 22%
+    var(--hc-offwhite) 65%,
+    var(--hc-asphalt) 35%
   );
 
   /* Accent (rustic orange) */

@@ -43,6 +43,7 @@ function ChipsEditor({
       {label ? <FormLabel>{label}</FormLabel> : null}
       <div className="flex gap-2">
         <Input
+          id={label}
           value={raw}
           onChange={e => setRaw(e.target.value)}
           placeholder={placeholder ?? 'Type and press Enter'}

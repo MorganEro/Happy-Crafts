@@ -121,7 +121,7 @@ export default async function RootLayout({
                 <Sidebar />
                 <div className="flex-1 min-w-0">
                   <MainNav />
-                  <main>{children}</main>
+                  <main className="mb-12">{children}</main>
                 </div>
               </div>
             </Providers>

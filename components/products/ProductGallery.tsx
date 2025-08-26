@@ -1,11 +1,12 @@
 'use client';
 
-import * as React from 'react';
+import { cn } from '@/lib/utils';
 import Image from 'next/image';
+import * as React from 'react';
+import { MdArrowBackIos, MdArrowForwardIos } from 'react-icons/md';
 import Lightbox from 'yet-another-react-lightbox';
 import Zoom from 'yet-another-react-lightbox/plugins/zoom';
 import 'yet-another-react-lightbox/styles.css';
-import { cn } from '@/lib/utils';
 
 export type GalleryImage = {
   url: string;
@@ -25,32 +26,104 @@ export function ProductGallery({
 }: ProductGalleryProps) {
   const [isOpen, setIsOpen] = React.useState(false);
   const [index, setIndex] = React.useState(0);
-
-  if (!images || images.length === 0) return null;
-
+  const count = images.length;
+  const goPrev = React.useCallback(
+    () => setIndex(i => (i - 1 + count) % count),
+    [count]
+  );
+  const goNext = React.useCallback(
+    () => setIndex(i => (i + 1) % count),
+    [count]
+  );
   const openAt = (i: number) => {
     setIndex(i);
     setIsOpen(true);
   };
+  const containerRef = React.useRef<HTMLDivElement>(null);
+  React.useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        goPrev();
+      } else if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        goNext();
+      }
+    };
+    el.addEventListener('keydown', onKey);
+    return () => el.removeEventListener('keydown', onKey);
+  }, [count, containerRef, goPrev, goNext]);
+
+  if (!images || images.length === 0) return null;
+
+  // Keyboard left/right when container is focused
 
   return (
-    <div className={cn('w-full', className)}>
+    <div
+      ref={containerRef}
+      tabIndex={0}
+      className={cn('w-full focus:outline-none', className)}
+      aria-label="Product image gallery">
       {/* Large image */}
-      <div className="relative aspect-[4/3] overflow-hidden rounded-2xl ring-1 ring-border">
+      <div className="relative aspect-[4/3] overflow-hidden rounded-2xl ring-1 ring-border group">
         <Image
           key={images[index]?.url}
           src={images[index]?.url}
           alt={images[index]?.alt ?? 'Product image'}
           fill
           sizes="(max-width: 768px) 100vw, 50vw"
-          className={cn('object-cover cursor-zoom-in', imageClassName)}
+          className={cn(
+            'object-cover cursor-zoom-in select-none',
+            imageClassName
+          )}
           onClick={() => openAt(index)}
           priority
         />
+
+        {/* Prev / Next arrows */}
+        {count > 1 && (
+          <>
+            <button
+              type="button"
+              aria-label="Previous image"
+              onClick={e => {
+                e.stopPropagation();
+                goPrev();
+              }}
+              className={cn(
+                'absolute left-2 top-1/2 -translate-y-1/2',
+                'rounded-full px-2 py-2 text-sm',
+                'bg-white/80 text-hc-asphalt ring-1 ring-border',
+                'hover:bg-white focus:bg-white',
+                'transition-opacity opacity-100 sm:opacity-0 sm:group-hover:opacity-100'
+              )}>
+              <MdArrowBackIos />
+            </button>
+            <button
+              type="button"
+              aria-label="Next image"
+              onClick={e => {
+                e.stopPropagation();
+                goNext();
+              }}
+              className={cn(
+                'absolute right-2 top-1/2 -translate-y-1/2',
+                'rounded-full px-2 py-2 text-sm',
+                'bg-white/80 text-hc-asphalt ring-1 ring-border',
+                'hover:bg-white focus:bg-white',
+                'transition-opacity opacity-100 sm:opacity-0 sm:group-hover:opacity-100'
+              )}>
+              <MdArrowForwardIos />
+            </button>
+          </>
+        )}
+
         <button
           aria-label="Zoom image"
           onClick={() => openAt(index)}
-          className="absolute top-3 right-3 rounded-lg bg-white/70 px-2 py-1 text-xs text-hc-asphalt hover:bg-white">
+          className="absolute top-3 right-3 rounded-lg bg-hc-offwhite/50 px-2 py-1 text-xs text-hc-asphalt ring-1 ring-border hover:bg-hc-offwhite">
           Zoom
         </button>
       </div>
@@ -82,7 +155,7 @@ export function ProductGallery({
         </div>
       )}
 
-      {/* Lightbox */}
+      {/* Lightbox (with default prev/next buttons enabled) */}
       <Lightbox
         open={isOpen}
         close={() => setIsOpen(false)}
@@ -94,10 +167,7 @@ export function ProductGallery({
           closeOnPullDown: true,
           disableSwipeNavigation: false,
         }}
-        render={{
-          buttonPrev: () => null,
-          buttonNext: () => null,
-        }}
+        // remove the custom render that nulled the buttons
       />
     </div>
   );

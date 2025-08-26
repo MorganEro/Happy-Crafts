@@ -109,7 +109,7 @@ export default function CreateProductPage() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto pt-8 px-4">
+    <div className="max-w-4xl mx-auto p-8 px-4">
       <PageHeader title="Create New Product" />
 
       <Form {...form}>
@@ -125,6 +125,7 @@ export default function CreateProductPage() {
             }
           )}
           className="space-y-8">
+            <fieldset disabled={isPending}>
           {/* Essentials */}
           <section className="space-y-6 rounded-2xl border bg-background p-6">
             <h2 className="text-xl font-semibold text-foreground">Basics</h2>
@@ -367,6 +368,7 @@ export default function CreateProductPage() {
               {isPending ? 'Creating…' : 'Create Product'}
             </Button>
           </div>
+          </fieldset>
         </form>
       </Form>
       <DevTool control={form.control} />

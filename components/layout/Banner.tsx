@@ -1,6 +1,6 @@
 function Banner() {
   return (
-    <div className="h-[50vh] sm:h-[70vh] mb-6 flex items-center justify-center flex-col animated-gradient">
+    <div className="h-[33vh] sm:h-[60vh] mb-6 flex items-center justify-center flex-col animated-gradient">
       <h1
         className="relative font-bold leading-[1] max-w-[60rem] font-plaster
         text-[4.5rem] md:text-[7rem] lg:text-[12rem] lg:-mt-5 uppercase

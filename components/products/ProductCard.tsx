@@ -1,13 +1,8 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
-import { useIsAdmin } from '@/lib/hooks/useAdmin';
 import { cn } from '@/lib/utils';
-import { Edit } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import DeleteProduct from './DeleteProduct';
 import FavoriteToggleButton from './FavoriteToggleButton';
 
 type Props = {
@@ -18,14 +13,6 @@ type Props = {
 };
 
 export function ProductCard({ id, name, imageUrl, className }: Props) {
-  const isAdmin = useIsAdmin();
-  const router = useRouter();
-
-  const handleEditClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    router.push(`/admin/products/${id}/edit`);
-  };
-
   return (
     <Link
       href={`/products/${id}`}
@@ -53,19 +40,6 @@ export function ProductCard({ id, name, imageUrl, className }: Props) {
         <h3 className="text-sm md:text-base font-medium text-foreground line-clamp-2">
           {name}
         </h3>
-        {isAdmin && (
-          <div className="flex">
-            <Button
-              variant="ghost"
-              size="icon"
-              className="p-2 rounded-full"
-              onClick={handleEditClick}>
-              <Edit className="h-3.5 w-3.5" />
-              <span className="sr-only">Edit product</span>
-            </Button>
-            <DeleteProduct productId={id} />
-          </div>
-        )}
       </div>
     </Link>
   );

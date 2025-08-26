@@ -1,4 +1,5 @@
 import { fetchProductWithImages } from '@/actions/product-actions';
+import AdminEditDelete from '@/components/products/AdminEditDelete';
 import FavoriteToggleButton from '@/components/products/FavoriteToggleButton';
 import { ProductGallery } from '@/components/products/ProductGallery';
 import { Badge } from '@/components/ui/badge';
@@ -40,7 +41,7 @@ async function ProductDetailPage({
         <ProductGallery images={galleryImages} />
 
         {/* Details (no price/company per your request) */}
-        <div className="space-y-6">
+        <div className="flex flex-col justify-between gap-3">
           <section className="space-y-3">
             <div className="flex gap-8 items-center">
               <h2 className="text-xl text-hc-teal-500 tracking-wide">
@@ -55,7 +56,7 @@ async function ProductDetailPage({
 
           {product.tags.length > 0 && (
             <section className="space-y-3">
-              <h3 className="text-sm font-medium text-hc-teal-500 uppercase tracking-wide">
+              <h3 className="text-sm font-medium text-hc-teal-500 uppercase tracking-wide mb-1">
                 Tags
               </h3>
               <div className="flex flex-wrap gap-2">
@@ -74,7 +75,7 @@ async function ProductDetailPage({
 
           {product.category && (
             <section className="space-y-3">
-              <h3 className="text-sm font-medium text-hc-teal-500 uppercase tracking-wide">
+              <h3 className="text-sm font-medium text-hc-teal-500 uppercase tracking-wide mb-1">
                 Category
               </h3>
               <Link
@@ -95,7 +96,7 @@ async function ProductDetailPage({
 
           {product.options.length > 0 && (
             <section className="space-y-3">
-              <h3 className="text-sm font-medium text-hc-teal-500 uppercase tracking-wide">
+              <h3 className="text-sm font-medium text-hc-teal-500 uppercase tracking-wide mb-1">
                 Options
               </h3>
               <div className="flex flex-wrap gap-2">
@@ -110,6 +111,9 @@ async function ProductDetailPage({
               </div>
             </section>
           )}
+          <div className="self-end">
+            <AdminEditDelete id={id} />
+          </div>
         </div>
       </div>
     </div>

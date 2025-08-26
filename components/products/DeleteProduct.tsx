@@ -38,7 +38,7 @@ function DeleteProduct({ productId }: { productId: string }) {
           <AlertDialogAction
             onClick={handleDelete}
             disabled={deleteProduct.isPending}
-            className="h-8 w-8 rounded-full">
+            className="rounded-md p-2">
             {deleteProduct.isPending ? 'Deleting...' : 'Delete'}
           </AlertDialogAction>
         </AlertDialogFooter>

@@ -8,6 +8,7 @@ import { FavoriteWithProduct } from '@/types';
 import { Product } from '@prisma/client';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
 
 export const productKeys = {
   single: (id: string) => ['product', id] as const,
@@ -97,6 +98,7 @@ export function useProductFavorite({
 
 export function useDeleteProduct() {
   const queryClient = useQueryClient();
+  const router = useRouter(); // Add this line
 
   return useMutation({
     mutationFn: async (productId: string) => {
@@ -117,6 +119,7 @@ export function useDeleteProduct() {
       queryClient.invalidateQueries({
         queryKey: ['products'],
       });
+      router.push('/products');
     },
     onError: (error: Error) => {
       toast.error(error.message);
