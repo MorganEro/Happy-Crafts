@@ -153,8 +153,8 @@
   ); /* ~#6A7074 */
   --input: color-mix(
     in srgb,
-    var(--hc-asphalt) 75%,
-    var(--hc-cream) 25%
+    var(--hc-asphalt) 70%,
+    var(--hc-cream) 30%
   ); /* ~#5B6165 */
 
   /* Focus ring keeps the brand blue pop */

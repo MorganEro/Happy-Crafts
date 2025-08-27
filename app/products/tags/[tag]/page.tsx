@@ -1,4 +1,3 @@
-// app/products/tags/[tag]/page.tsx
 import { ProductCard } from '@/components/products/ProductCard';
 import BackLink from '@/components/ui/BackLink';
 import EmptyState from '@/components/ui/EmptyState';

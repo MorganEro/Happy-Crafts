@@ -33,7 +33,7 @@ function StarIcon({
       {/* outline path */}
       <path
         d="M12 17.27L18.18 21l-1.64-7.03L22 9.25l-7.19-.62L12 2 9.19 8.63 2 9.25l5.46 4.72L5.82 21z"
-        className="fill-transparent stroke-[1.5] stroke-hc-blue-400"
+        className="fill-transparent stroke-[1.5] stroke-hc-orange"
       />
       {/* fill path */}
       <path

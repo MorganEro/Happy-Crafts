@@ -18,6 +18,7 @@ import FavoritesItem from '../navItems/FavoritesItem';
 import NavItem from '../navItems/NavItem';
 import SectionLabel from '../navItems/SectionLabel';
 import SidebarTaxonomy from './SidebarTaxonomy';
+import ProductSearch from '../navItems/ProductSearch';
 
 function SidebarInner() {
   const { open, toggle } = useSidebar();
@@ -65,6 +66,10 @@ function SidebarInner() {
       <ScrollArea className="flex-1 overflow-hidden mt-5">
         <div className="max-w-[90%] min-w-0">
           <nav className="flex flex-col w-full max-w-full min-w-0 overflow-x-hidden box-border">
+            <ProductSearch
+              showInlineResults
+              resultsHrefBase="/products/search?q="
+            />
             <SectionLabel hidden={!open}>Browse</SectionLabel>
             <ul className="px-2 space-y-1">
               <li>

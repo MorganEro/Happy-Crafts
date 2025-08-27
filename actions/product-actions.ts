@@ -5,7 +5,13 @@ import { default as db, default as prisma } from '@/lib/db';
 import { checkRole } from '@/lib/roles';
 import { deleteImage } from '@/lib/supabase';
 import { renderError } from '@/lib/utils/error';
-import { errorMessage, productFormSchema, productUpdateSchema } from '@/types';
+import {
+  errorMessage,
+  productFormSchema,
+  productUpdateSchema,
+  SearchResult,
+  SearchSchema,
+} from '@/types';
 import { auth } from '@clerk/nextjs/server';
 import { Product } from '@prisma/client';
 import { revalidatePath } from 'next/cache';
@@ -25,6 +31,7 @@ type ToggleFavoriteParams = {
   productId: string;
   favoriteId: string | null;
 };
+
 export const fetchAllProducts = async () => {
   return db.product.findMany({
     orderBy: {
@@ -292,3 +299,39 @@ export const fetchUserFavorites = async () => {
   });
   return favorites;
 };
+
+export async function searchProductsAction(
+  input: unknown
+): Promise<SearchResult[]> {
+  const { q, limit } = SearchSchema.parse(input);
+  const qIns = q.toLowerCase();
+
+  // naive tokenization for tags/arrays (split on space, comma)
+  const tokens = Array.from(new Set(qIns.split(/[\s,]+/).filter(Boolean)));
+
+  return db.product.findMany({
+    where: {
+      OR: [
+        { name: { contains: q, mode: 'insensitive' } },
+        { description: { contains: q, mode: 'insensitive' } },
+        { category: { contains: q, mode: 'insensitive' } },
+        // Match any token exactly against tags/options elements.
+        // (For true substring-in-array, see "Advanced" note at bottom.)
+        ...(tokens.length
+          ? [{ tags: { hasSome: tokens } }, { options: { hasSome: tokens } }]
+          : []),
+      ],
+    },
+    orderBy: { updatedAt: 'desc' },
+    take: limit,
+    select: {
+      id: true,
+      name: true,
+      image: true,
+      price: true,
+      category: true,
+      tags: true,
+      description: true,
+    },
+  });
+}

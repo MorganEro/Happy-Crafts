@@ -16,7 +16,6 @@ type RawSearchParams =
   | Record<string, string | string[] | undefined>;
 
 type PageProps = {
-  // 👇 Next 14.2+/15: searchParams is async in server components
   searchParams: Promise<RawSearchParams>;
 };
 

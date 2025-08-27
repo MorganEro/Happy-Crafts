@@ -41,13 +41,13 @@ export function MainNav() {
               {userId ? (
                 <div className="flex items-center gap-4">
                   <div className="text-center">
-                    <p className="text-sm font-bold capitalize text-hc-orange/80">
+                    <p className="text-xs font-bold capitalize text-foreground">
                       Welcome, {user?.username || user?.firstName || 'User'}
                     </p>
                   </div>
                   <div className="flex items-center gap-2">
                     {isAdmin && (
-                      <span className="rounded-full border border-hc-orange/20 bg-hc-orange/10 p-1.5 text-xs font-semibold text-hc-orange/80 flex items-center gap-2">
+                      <span className="rounded-full border border-hc-blue-600/20 bg-hc-blue-600/10 p-1.5 text-xs font-semibold text-hc-blue-600 flex items-center gap-2">
                         <UserButton
                           appearance={{
                             elements: {

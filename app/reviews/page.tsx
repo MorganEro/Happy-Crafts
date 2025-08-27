@@ -12,7 +12,6 @@ export default function ReviewsPage() {
         title="All Reviews"
         subtitle="What customers are saying"
       />
-      {/* Client list (hydrates from React Query) */}
       <ReviewsListClient />
     </div>
   );

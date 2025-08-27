@@ -2,9 +2,10 @@ import {
   fetchAllProducts,
   fetchProductWithImages,
   fetchUserFavorites,
+  searchProductsAction,
   toggleFavoriteAction,
 } from '@/actions/product-actions';
-import { FavoriteWithProduct } from '@/types';
+import { FavoriteWithProduct, SearchResult } from '@/types';
 import { Product } from '@prisma/client';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
@@ -59,6 +60,17 @@ export const useProductFavoritesQuery = ({
 
   return { data: favoriteId, isLoading };
 };
+
+export function useProductSearch(q: string, limit = 24) {
+  return useQuery({
+    queryKey: ['product-search', q, limit],
+    queryFn: async (): Promise<SearchResult[]> => {
+      if (!q) return [];
+      return searchProductsAction({ q, limit });
+    },
+    enabled: !!q,
+  });
+}
 
 // Mutations
 type UseProductFavoriteProps = {

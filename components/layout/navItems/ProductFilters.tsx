@@ -1,10 +1,6 @@
-// components/sidebar/ProductFilters.tsx
 'use client';
 
-import {
-  PRODUCT_CATEGORIES,
-  PRODUCT_TAGS
-} from '@/lib/constants';
+import { PRODUCT_CATEGORIES, PRODUCT_TAGS } from '@/lib/constants';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 

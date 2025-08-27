@@ -18,6 +18,21 @@ export const CategoryUnion = z.union(
   ]
 );
 
+export const SearchSchema = z.object({
+  q: z.string().trim().min(1),
+  limit: z.number().int().min(1).max(50).default(24),
+});
+
+export type SearchResult = {
+  id: string;
+  name: string;
+  image: string;
+  price: number;
+  category: string;
+  tags: string[];
+  description: string;
+};
+
 export const productSchema = z.object({
   name: z.string().min(1, 'Name is required'),
   company: z.string().min(1, 'Company is required'),

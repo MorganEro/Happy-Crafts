@@ -8,7 +8,9 @@ export function ReviewsListClient() {
   const { data, isLoading, isError } = useAllReviews();
 
   if (isLoading) {
-    return <div className="text-sm text-muted-foreground">Loading reviews…</div>;
+    return (
+      <div className="text-sm text-muted-foreground">Loading reviews…</div>
+    );
   }
 
   if (isError || !data) {
@@ -23,7 +25,6 @@ export function ReviewsListClient() {
     return <div className="text-sm text-muted-foreground">No reviews yet.</div>;
   }
 
-  // here TypeScript knows data is Review[]
   return (
     <ul className="space-y-4">
       {data.map((r: Review) => (
