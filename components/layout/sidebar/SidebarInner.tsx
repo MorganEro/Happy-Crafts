@@ -13,12 +13,13 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { BsLayoutSidebar } from 'react-icons/bs';
 import { FaRegCommentAlt } from 'react-icons/fa';
+import { FiSearch } from 'react-icons/fi';
 import { AdminOnly } from '../navItems/AdminOnly';
 import FavoritesItem from '../navItems/FavoritesItem';
 import NavItem from '../navItems/NavItem';
+import ProductSearch from '../navItems/ProductSearch';
 import SectionLabel from '../navItems/SectionLabel';
 import SidebarTaxonomy from './SidebarTaxonomy';
-import ProductSearch from '../navItems/ProductSearch';
 
 function SidebarInner() {
   const { open, toggle } = useSidebar();
@@ -66,10 +67,19 @@ function SidebarInner() {
       <ScrollArea className="flex-1 overflow-hidden mt-5">
         <div className="max-w-[90%] min-w-0">
           <nav className="flex flex-col w-full max-w-full min-w-0 overflow-x-hidden box-border">
-            <ProductSearch
-              showInlineResults
-              resultsHrefBase="/products/search?q="
-            />
+            {open ? (
+              <ProductSearch
+                showInlineResults
+                resultsHrefBase="/products/search?q="
+              />
+            ) : (
+              <button
+                onClick={toggle}
+                className="ms-2.5 mb-1.5 flex h-10 w-10 items-center justify-center rounded-lg hover:bg-hc-cream/50 transition"
+                aria-label="Expand sidebar to search products">
+                <FiSearch className="h-6 w-6" />
+              </button>
+            )}
             <SectionLabel hidden={!open}>Browse</SectionLabel>
             <ul className="px-2 space-y-1">
               <li>

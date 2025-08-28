@@ -23,6 +23,10 @@ export const SearchSchema = z.object({
   limit: z.number().int().min(1).max(50).default(24),
 });
 
+export type ProductSearchHandle = {
+  focus: () => void;
+};
+
 export type SearchResult = {
   id: string;
   name: string;

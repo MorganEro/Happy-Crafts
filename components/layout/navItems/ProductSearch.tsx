@@ -1,4 +1,3 @@
-// components/sidebar/ProductSearch.tsx
 'use client';
 
 import { z } from 'zod';
@@ -21,35 +20,38 @@ const Schema = z.object({
 type Values = z.infer<typeof Schema>;
 
 type Props = {
-  /** If you want to render inline quick results in the sidebar */
   showInlineResults?: boolean;
-  /** Limit inline preview count */
   inlineLimit?: number;
-  /** If you prefer navigation, provide a results page href like `/products?search=` */
-  resultsHrefBase?: string;
+  resultsHrefBase?: string; // e.g. "/products/search?q="
+  autoFocus?: boolean; // default true
 };
 
 export default function ProductSearch({
   showInlineResults = true,
   inlineLimit = 6,
-  resultsHrefBase = '/products?search=',
+  resultsHrefBase = '/products/search?q=',
+  autoFocus = true,
 }: Props) {
   const form = useForm<Values>({
     resolver: zodResolver(Schema),
     defaultValues: { q: '' },
   });
 
-  // Debounce the search text
-  const [debouncedQ, setDebouncedQ] = useState('');
   const watchQ = form.watch('q') || '';
+  const [debouncedQ, setDebouncedQ] = useState('');
 
+  // Debounce typing for query hook
   useEffect(() => {
     const id = setTimeout(() => setDebouncedQ(watchQ.trim()), 300);
     return () => clearTimeout(id);
   }, [watchQ]);
 
-  const { data: results, isFetching } = useProductSearch(debouncedQ);
+  // Simple autofocus using RHF
+  useEffect(() => {
+    if (autoFocus) form.setFocus('q');
+  }, [autoFocus, form]);
 
+  const { data: results, isFetching } = useProductSearch(debouncedQ);
   const hasQuery = debouncedQ.length > 0;
   const preview = useMemo(
     () => (results || []).slice(0, inlineLimit),
@@ -59,7 +61,6 @@ export default function ProductSearch({
   const onSubmit = (values: Values) => {
     const q = (values.q || '').trim();
     if (!q) return;
-    // Navigate to a full results page, or handle however you like
     window.location.href = `${resultsHrefBase}${encodeURIComponent(q)}`;
   };
 
@@ -68,7 +69,7 @@ export default function ProductSearch({
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="space-y-2 ">
+          className="space-y-2">
           <FormField
             control={form.control}
             name="q"
@@ -78,11 +79,13 @@ export default function ProductSearch({
                   <div className="flex items-center gap-1">
                     <Input
                       {...field}
-                      placeholder="Search products..."
+                      placeholder="Search products…"
+                      className="bg-hc-offwhite/80 border-hc-cream focus-visible:ring-hc-blue-600 placeholder:text-hc-teal-500"
                     />
                     <Button
                       type="submit"
-                      size="sm">
+                      size="sm"
+                      className="rounded-xl">
                       Search
                     </Button>
                   </div>
@@ -109,7 +112,7 @@ export default function ProductSearch({
                   className="group">
                   <Link
                     href={`/products/${p.id}`}
-                    className="rounded-xl border bg-hc-offwhite/70 hover:bg-hc-cream/50 transition p-2 grid grid-cols-[48px_1fr] gap-1.5 items-center mb-2">
+                    className="mb-2 grid grid-cols-[48px_1fr] items-center gap-1.5 rounded-xl border bg-hc-offwhite/70 p-2 transition hover:bg-hc-cream/50">
                     <Image
                       src={p.image}
                       alt={p.name}
@@ -117,17 +120,16 @@ export default function ProductSearch({
                       height={48}
                       sizes="48px"
                       loading="lazy"
-                      className="h-12 w-12 rounded-lg object-cover border border-hc-cream"
-                    />{' '}
+                      className="h-12 w-12 rounded-lg border border-hc-cream object-cover"
+                    />
                     <div className="min-w-0">
-                      <div className="font-medium text-sm text-hc-asphalt truncate capitalize">
+                      <div className="truncate text-sm font-medium capitalize text-hc-asphalt">
                         {highlight(p.name, debouncedQ)}
                       </div>
-
-                      <div className="text-xs text-hc-teal-500 truncate capitalize">
+                      <div className="truncate text-xs capitalize text-hc-teal-500">
                         {highlight(p.category, debouncedQ)}
                       </div>
-                      <div className="text-xs text-hc-teal-500 truncate">
+                      <div className="truncate text-xs text-hc-teal-500">
                         {p.tags?.length ? (
                           <>
                             {p.tags.slice(0, 3).join(' | ')}
@@ -157,7 +159,7 @@ export default function ProductSearch({
   );
 }
 
-/** Tiny helper to bold matched text (client-only) */
+/** Bold the match (client-only) */
 function highlight(text: string, q: string) {
   if (!q) return text;
   const i = text.toLowerCase().indexOf(q.toLowerCase());
@@ -168,7 +170,7 @@ function highlight(text: string, q: string) {
   return (
     <>
       {before}
-      <span className="font-semibold bg-yellow-200 p-1 rounded">{match}</span>
+      <span className="rounded bg-hc-cream/60">{match}</span>
       {after}
     </>
   );
