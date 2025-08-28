@@ -4,12 +4,12 @@ import { Button } from '@/components/ui/button';
 import { useSidebar } from '@/context/sidebar-context';
 import { useIsAdmin } from '@/lib/hooks/useAdmin';
 import { UserButton, useAuth, useUser } from '@clerk/nextjs';
-import Image from 'next/image';
+import { Moon, Sun } from 'lucide-react';
+import { useTheme } from 'next-themes';
 import Link from 'next/link';
 import { LuMenu } from 'react-icons/lu';
 import Container from '../Container';
-import { useTheme } from 'next-themes';
-import { Moon, Sun } from 'lucide-react';
+import Logo from '../navItems/Logo';
 
 export function MainNav() {
   const { userId, isLoaded: isAuthLoaded } = useAuth();
@@ -23,15 +23,8 @@ export function MainNav() {
     <header className="sticky top-0 z-40 flex items-center border-b backdrop-blur px-2 h-15 bg-sidebar">
       <Container className="w-full flex items-center">
         {!open && (
-          <div className="mr-2 bg-hc-asphalt/30 rounded-sm p-1.5 border">
-            <Link href="/">
-              <Image
-                src="/logo.svg"
-                alt="Logo"
-                width={48}
-                height={48}
-              />
-            </Link>
+          <div className="mr-2">
+            <Logo />
           </div>
         )}
 

@@ -9,13 +9,12 @@ import {
 } from '@/components/ui/tooltip';
 import { useSidebar } from '@/context/sidebar-context';
 import { Package, Plus } from 'lucide-react';
-import Image from 'next/image';
-import Link from 'next/link';
 import { BsLayoutSidebar } from 'react-icons/bs';
 import { FaRegCommentAlt } from 'react-icons/fa';
 import { FiSearch } from 'react-icons/fi';
 import { AdminOnly } from '../navItems/AdminOnly';
 import FavoritesItem from '../navItems/FavoritesItem';
+import Logo from '../navItems/Logo';
 import NavItem from '../navItems/NavItem';
 import ProductSearch from '../navItems/ProductSearch';
 import SectionLabel from '../navItems/SectionLabel';
@@ -30,14 +29,7 @@ function SidebarInner() {
       <div className="flex items-center gap-2 px-3  border-b h-15">
         {open && (
           <div className="ml-3 flex-1">
-            <Link href="/">
-              <Image
-                src="/logo.svg"
-                alt="Logo"
-                width={48}
-                height={48}
-              />
-            </Link>
+            <Logo />
           </div>
         )}
         <TooltipProvider>
