@@ -80,12 +80,10 @@ export default function ProductSearch({
                     <Input
                       {...field}
                       placeholder="Search products…"
-                      className="bg-hc-offwhite/80 border-hc-cream focus-visible:ring-hc-blue-600 placeholder:text-hc-teal-500"
                     />
                     <Button
                       type="submit"
-                      size="sm"
-                      className="rounded-xl">
+                      className="rounded-md">
                       Search
                     </Button>
                   </div>
