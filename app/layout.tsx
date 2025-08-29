@@ -73,7 +73,7 @@ export const metadata: Metadata = {
   title: 'Happy Crafts',
   description: 'Happy Crafts by Leslie',
   icons: {
-    icon: [{ url: '/favicon2.png', sizes: 'any', type: 'image/png' }],
+    icon: [{ url: '/favicon.png', sizes: 'any', type: 'image/png' }],
   },
 };
 

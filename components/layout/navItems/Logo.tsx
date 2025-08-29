@@ -6,17 +6,15 @@ import Link from 'next/link';
 function Logo() {
   return (
     <Button
-      variant="secondary"
+      variant="ghost"
       size="lg"
-      className={cn(
-        'bg-hc-asphalt/30 rounded-full p-2 border border-hc-blue-400/50'
-      )}>
+      className={cn('p-0 flex items-center justify-center')}>
       <Link href="/">
         <Image
           src="/logo.svg"
           alt="Logo"
-          width={25}
-          height={25}
+          width={48}
+          height={48}
         />
       </Link>
     </Button>
