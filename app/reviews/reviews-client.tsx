@@ -22,7 +22,11 @@ export function ReviewsListClient() {
   }
 
   if (data.length === 0) {
-    return <div className="text-sm text-muted-foreground">No reviews yet.</div>;
+    return (
+      <div className="text-sm text-muted-foreground">
+        No reviews yet. Be the first!
+      </div>
+    );
   }
 
   return (

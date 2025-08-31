@@ -8,7 +8,9 @@ function Logo() {
     <Button
       variant="ghost"
       size="lg"
-      className={cn('p-0 flex items-center justify-center')}>
+      className={cn(
+        'p-2 flex items-center justify-center hover:bg-transparent hover:scale-105 transition-transform duration-200 dark:hover:bg-transparent'
+      )}>
       <Link href="/">
         <Image
           src="/logo.svg"

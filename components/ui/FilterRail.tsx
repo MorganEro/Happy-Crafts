@@ -1,4 +1,3 @@
-// components/product/FilterRail.tsx
 'use client';
 
 import Link from 'next/link';
@@ -11,10 +10,11 @@ type FilterRailProps = {
   paramKey: 'tag' | 'category';
   /** List of chip values to render */
   items: readonly string[];
-  /** Which value is currently active (from server) */
   activeValue?: string;
-  /** Preserve these other query params when changing this one */
-  otherParams?: Partial<Record<'tag' | 'category', string>>;
+  /** Other params to preserve when building the URL (category, tag, perPage, etc.) */
+  otherParams?: Partial<
+    Record<'tag' | 'category' | 'page' | 'perPage', string>
+  >;
 };
 
 export function FilterRail({
@@ -27,16 +27,24 @@ export function FilterRail({
 
   const buildHref = (val: string) => {
     const params = new URLSearchParams(sp.toString());
-    // apply other preserved params
+
+    // Apply preserved params (category, tag, perPage, etc.)
     if (otherParams.category !== undefined)
       params.set('category', otherParams.category);
     if (otherParams.tag !== undefined) params.set('tag', otherParams.tag);
+    if (otherParams.perPage !== undefined)
+      params.set('perPage', otherParams.perPage);
+
+    // When changing/toggling this filter, always reset to page 1
+    params.set('page', '1');
 
     if (val && val !== activeValue) {
       params.set(paramKey, val);
     } else {
-      params.delete(paramKey); // toggle off
+      // Toggle off the active chip removes this param
+      params.delete(paramKey);
     }
+
     const qs = params.toString();
     return qs ? `/products?${qs}` : '/products';
   };
@@ -47,7 +55,7 @@ export function FilterRail({
         className={cn(
           'flex gap-2 overflow-x-auto py-1',
           'scrollbar-none snap-x snap-mandatory',
-          'scroll-px-4 px-1' // scroll padding (snap endpoints) + visual padding
+          'scroll-px-4 px-1'
         )}>
         {items.map(val => {
           const active = val === activeValue;
@@ -60,7 +68,7 @@ export function FilterRail({
                 'snap-start inline-flex items-center whitespace-nowrap rounded-xl px-3 py-1.5 text-sm transition',
                 'ring-1 ring-border',
                 active
-                  ? 'bg-hc-cream ring-2 ring-hc-orange text-hc-asphalt'
+                  ? 'bg-hc-cream/50 ring-1 ring-hc-orange/50 text-hc-asphalt'
                   : 'hover:bg-hc-offwhite text-hc-asphalt'
               )}>
               <span

@@ -1,12 +1,11 @@
 // app/loading.tsx
+import Logo from '@/components/layout/navItems/Logo';
 import type { JSX } from 'react';
 
 function BrandLockup(): JSX.Element {
   return (
     <div className="flex flex-col items-center gap-2">
-      <span className="text-sm tracking-[0.25em] uppercase text-hc-teal-500">
-        Happy Crafts
-      </span>
+      <Logo />
       <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight text-foreground">
         Happy Crafts <span className="text-hc-blue-600">by Leslie&nbsp;P.</span>
       </h1>

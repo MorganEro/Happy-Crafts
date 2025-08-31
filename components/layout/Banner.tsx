@@ -44,7 +44,7 @@ function Banner() {
           Crafts
         </p>
 
-        <p className="absolute right-0 -bottom-4 text-[var(--hc-asphalt)] font-medium text-[1rem] lg:text-[2rem] capitalize font-molle">
+        <p className="absolute right-0 -bottom-4 text-[var(--hc-asphalt)] text-[1rem] lg:text-[2rem] capitalize font-molle">
           By Leslie
         </p>
       </h1>
