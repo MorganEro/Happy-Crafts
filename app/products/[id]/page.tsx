@@ -2,6 +2,7 @@ import { fetchProductWithImages } from '@/actions/product-actions';
 import AdminEditDelete from '@/components/products/AdminEditDelete';
 import FavoriteToggleButton from '@/components/products/FavoriteToggleButton';
 import { ProductGallery } from '@/components/products/ProductGallery';
+import { ShareButton } from '@/components/products/ShareButton';
 import { Badge } from '@/components/ui/badge';
 import BreadCrumbs from '@/components/ui/BreadCrumbs';
 import { PageHeader } from '@/components/ui/PageHeader';
@@ -43,11 +44,15 @@ async function ProductDetailPage({
         {/* Details (no price/company per your request) */}
         <div className="flex flex-col justify-between gap-3">
           <section className="space-y-3">
-            <div className="flex gap-8 items-center">
-              <h2 className="text-xl text-hc-teal-500 tracking-wide">
+            <div className="flex gap-2 items-center">
+              <h2 className="text-xl text-hc-teal-500 tracking-wide me-8">
                 Description
               </h2>
               <FavoriteToggleButton productId={product.id} />
+              <ShareButton
+                productName={product.name}
+                productUrl={`${process.env.NEXT_PUBLIC_SITE_URL}/products/${product.id}`}
+              />
             </div>
             <p className="text-base leading-relaxed text-foreground whitespace-pre-wrap">
               {product.description}

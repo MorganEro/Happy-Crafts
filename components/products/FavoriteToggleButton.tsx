@@ -59,7 +59,7 @@ export default function FavoriteToggleButton({
       aria-pressed={isFavorite}
       disabled={isMutating}
       onClick={() => mutate()}
-      className="inline-flex hover:scale-105"
+      className="inline-flex hover:scale-105 transition-transform duration-200 ease-in-out"
       title={isFavorite ? 'Remove from favorites' : 'Add to favorites'}>
       <FavoriteSubmitIcon
         isFavorite={isFavorite}

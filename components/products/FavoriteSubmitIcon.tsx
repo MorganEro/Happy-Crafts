@@ -9,7 +9,7 @@ export const FavoriteSubmitIcon = ({
   isLoading?: boolean;
 }) => {
   return (
-    <div className="p-2 rounded-full bg-white/40">
+    <div className="p-2 rounded-full bg-white/40 cursor-pointer">
       {isLoading ? (
         <IoReload className="mr-2 h-4 w-4 animate-spin" />
       ) : isFavorite ? (
